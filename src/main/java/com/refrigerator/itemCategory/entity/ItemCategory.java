@@ -9,7 +9,6 @@ import lombok.Setter;
 @Entity
 public class ItemCategory {
 
-    // Getters and Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;

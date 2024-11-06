@@ -6,13 +6,12 @@ import lombok.Getter;
 public class ItemCategoryResponseDto {
 
     // Getters
-    private Long categoryId;
-    private String name;
+    private final Long categoryId;
+    private final String name;
 
     // Constructor
     public ItemCategoryResponseDto(Long categoryId, String name) {
         this.categoryId = categoryId;
         this.name = name;
     }
-
 }

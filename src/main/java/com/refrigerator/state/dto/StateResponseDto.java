@@ -6,13 +6,12 @@ import lombok.Getter;
 public class StateResponseDto {
 
     // Getters
-    private Long stateId;
-    private String name;
+    private final Long stateId;
+    private final String name;
 
     // Constructor
     public StateResponseDto(Long stateId, String name) {
         this.stateId = stateId;
         this.name = name;
     }
-
 }
