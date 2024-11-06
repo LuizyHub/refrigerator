@@ -7,12 +7,12 @@
 <div th:fragment="header">
     <header>
         <div style="text-align: right;">
-            <div th:if="${session.loginUserId == null}">
-                <a th:href="@{/login}">Login</a>
-                <a th:href="@{/register}">Register</a>
+            <div th:if="${session.loginMemberId == null}">
+                <button onclick="location.href='/login'">Login</button>
+                <button onclick="location.href='/register'">Register</button>
             </div>
-            <div th:if="${session.loginUserId != null}">
-                <span th:text="'Hello, ' + ${session.loginUserName} + '!'">Hello, User!</span>
+            <div th:if="${session.loginMemberId != null}">
+                <span th:text="'Hello, ' + ${session.loginMemberName} + '!'">Hello, User!</span>
                 <form th:action="@{/logout}" method="post" style="display: inline;">
                     <button type="submit">Logout</button>
                 </form>

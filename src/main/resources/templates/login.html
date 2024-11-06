@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{base :: head}"></head>
 <body>
-<div th:fragment="content">
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
     <h2>Login</h2>
     <form th:action="@{/login}" th:object="${user}" method="post">
         <div>
@@ -12,8 +14,9 @@
         </div>
         <div th:if="${error}" th:text="${error}"></div>
         <button type="submit">Login</button>
+        <button type="button" onclick="window.location.href='/register'">Register</button>
+
     </form>
-    <a th:href="@{/register}">Register</a>
-</div>
+</main>
 </body>
 </html>

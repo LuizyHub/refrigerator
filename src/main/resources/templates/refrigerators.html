@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <h2>Your Refrigerators</h2>
+
+    <!-- 냉장고 목록이 없을 때 메시지 -->
+    <div th:if="${refrigerators.empty}">
+        <p>No refrigerators found.</p>
+    </div>
+
+    <!-- 냉장고 목록 테이블 -->
+    <table th:if="${!refrigerators.empty}">
+        <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 각 냉장고 정보를 반복 출력 -->
+        <tr th:each="refrigerator : ${refrigerators}">
+            <td>
+                <!-- 냉장고 이름을 클릭하면 refrigId로 이동 -->
+                <a th:href="@{'/refrigerators/' + ${refrigerator.refrigId} + '/inventories'}"
+                   th:text="${refrigerator.name}">Sample Refrigerator</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 새로운 냉장고 추가 링크 -->
+    <a href="/refrigerators/new" class="button">Add New Refrigerator</a>
+</main>
+</body>
+</html>

@@ -1,22 +1,31 @@
 package com.refrigerator.refrig.entity;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
 
 @Entity
-@Table(name = "Refrigerator")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "refrigerator")
 public class Refrigerator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long refrigId; // refrig_id
+    private Long refrigId;
 
     @Column(nullable = false, length = 100)
     private String name;
+
+    // to be implemented
+//    private Set<Inventory> inventories = new HashSet<>();
+
+    private Refrigerator(String name) {
+        this.name = name;
+    }
+
+    public static Refrigerator of(String name) {
+        return new Refrigerator(name);
+    }
 }

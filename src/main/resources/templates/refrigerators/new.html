@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <h2>Create New Refrigerator</h2>
+
+    <!-- 생성 폼 -->
+    <form th:action="@{/refrigerators/new}" th:object="${refrigerator}" method="post">
+        <div th:if="${error}" th:text="${error}"></div>
+
+        <div>
+            <label for="name">Refrigerator Name:</label>
+            <input type="text" th:field="*{name}" id="name" />
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <button type="submit">Create Refrigerator</button>
+        <button type="button" onclick="window.location.href='/refrigerators'">Cancel</button>
+    </form>
+</main>
+</body>
+</html>

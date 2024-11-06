@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:fragment="head">
     <title>Refrigerator Inventory Management</title>
     <link rel="stylesheet" th:href="@{/css/pico.min.css}">
 </head>
 <body>
-<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+<header>
+    <div style="text-align: right;">
+        <div th:if="${session.loginUserId == null}">
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Register</a>
+        </div>
+        <div th:if="${session.loginUserId != null}">
+            <span th:text="'Hello, ' + ${session.loginUserName} + '!'">Hello, User!</span>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</header>
 
-<main>
-    <div th:replace="${content}"></div> <!-- 개별 페이지 내용 -->
+<main th:fragment="content">
+    <!-- 페이지별 내용이 여기에 삽입됩니다 -->
 </main>
 
 <footer>
