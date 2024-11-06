@@ -1,18 +1,18 @@
 package com.refrigerator.user.entity;
 
+import com.refrigerator.role.entity.UserRefrig;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Table;
-import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Table(name = "User")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
@@ -24,4 +24,16 @@ public class User {
 
     @Column(nullable = false, length = 100)
     private String name;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserRefrig> userRefrigs = new HashSet<>();
+
+    private User(String email, String name) {
+        this.email = email;
+        this.name = name;
+    }
+
+    public static User of(String email, String name) {
+        return new User(email, name);
+    }
 }

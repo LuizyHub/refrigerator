@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Refrigerator Inventory Management</title>
+    <link rel="stylesheet" th:href="@{/css/pico.min.css}">
+</head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main>
+    <div th:replace="${content}"></div> <!-- 개별 페이지 내용 -->
+</main>
+
+<footer>
+    <!-- 공통 푸터 (필요 시) -->
+</footer>
+</body>
+</html>

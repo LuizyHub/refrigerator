@@ -1,55 +1,88 @@
 package com.refrigerator.user.controller;
 
+import com.refrigerator.common.session.SessionConst;
 import com.refrigerator.user.dto.*;
 import com.refrigerator.user.entity.User;
 import com.refrigerator.user.service.UserService;
-import com.refrigerator.common.exception.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestAttributes;
 
 
-@RestController
-@RequestMapping("/api/users")
+@Controller
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    // 1. 사용자 등록
-    @PostMapping
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        try {
-            userService.registerUser(userRequestDto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (EmailAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse("duplicated email"));
-        }
+    @GetMapping("/login")
+    public String loginPage(
+            @ModelAttribute("user") UserLoginDto userLoginDto
+    ) {
+        return "login";
     }
 
-    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequestDto loginRequestDto, WebRequest webRequest) {
+    public String login(
+            Model model,
+            @Valid @ModelAttribute("user") UserLoginDto userLoginDto,
+            BindingResult bindingResult,
+            HttpSession session
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "login";
+        }
+
+        User user = userService.login(userLoginDto);
+        if (user == null) {
+            model.addAttribute("error", "존재하지 않는 사용자입니다.");
+            return "login";
+        }
+
+        session.setAttribute(SessionConst.LOGIN_USER_ID, user.getUserId());
+        session.setAttribute(SessionConst.LOGIN_USER_NAME, user.getName());
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/register")
+    public String registerPage(
+            @ModelAttribute("user") UserRegisterDto userRegisterDto
+    ) {
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(
+            Model model,
+            @Valid @ModelAttribute("user") UserRegisterDto userRegisterDto,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
         try {
-            User user = userService.loginUser(loginRequestDto);
-            // 세션에 사용자 ID 저장
-            webRequest.setAttribute("userId", user.getUserId(), RequestAttributes.SCOPE_SESSION);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse("no such email"));
+            userService.registerUser(userRegisterDto);
+            return "redirect:/login";
+        } catch (Exception e) {
+            model.addAttribute("error", "회원가입에 실패했습니다.");
+            return "register";
         }
     }
 
     // 로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<Void> logoutUser(WebRequest webRequest) {
+    public String logoutUser(
+            HttpSession session
+    ) {
         // 세션에서 사용자 ID 제거
-        webRequest.removeAttribute("userId", RequestAttributes.SCOPE_SESSION);
-        return new ResponseEntity<>(HttpStatus.OK);
+        session.removeAttribute(SessionConst.LOGIN_USER_ID);
+        session.removeAttribute(SessionConst.LOGIN_USER_NAME);
+        return "redirect:/";
     }
 }

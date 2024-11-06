@@ -1,12 +1,13 @@
 package com.refrigerator.role.entity;
 
-import com.refrigerator.common.entity.Role;
+
+import com.refrigerator.refrig.entity.Refrigerator;
 import com.refrigerator.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "User_Refrig")

@@ -31,8 +31,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	// h2 database
+	implementation 'com.h2database:h2'
+
 	// spring validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 tasks.named('test') {
