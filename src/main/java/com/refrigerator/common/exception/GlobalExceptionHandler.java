@@ -32,5 +32,12 @@ public class GlobalExceptionHandler {
         return "error/403";  // 403.html 페이지로 이동
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleIllegalArgumentException(IllegalArgumentException e, Model model) {
+        model.addAttribute("errorTitle", "Forbidden");
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error/403";  // 403.html 페이지로 이동
+    }
+
     // 기타 예외 처리 메서드...
 }
