@@ -1,14 +1,10 @@
 package com.refrigerator.itemCategory.service;
-
-import com.refrigerator.itemCategory.dto.ItemCategoryCreateDto;
-import com.refrigerator.itemCategory.dto.ItemCategoryResponseDto;
 import com.refrigerator.itemCategory.entity.ItemCategory;
 import com.refrigerator.itemCategory.repository.ItemCategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ItemCategoryService {
@@ -19,31 +15,24 @@ public class ItemCategoryService {
         this.itemCategoryRepository = itemCategoryRepository;
     }
 
-    public ItemCategoryResponseDto createItemCategory(ItemCategoryCreateDto itemCategoryCreateDto) {
+    public ItemCategory createItemCategory(String name) {
         ItemCategory category = new ItemCategory();
-        category.setName(itemCategoryCreateDto.getName());
-        category = itemCategoryRepository.save(category);
-        return new ItemCategoryResponseDto(category.getCategoryId(), category.getName());
+        category.setName(name);
+        return itemCategoryRepository.save(category);
     }
 
-    public ItemCategoryResponseDto getItemCategoryById(Long id) {
-        ItemCategory category = itemCategoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Item Category not found"));
-        return new ItemCategoryResponseDto(category.getCategoryId(), category.getName());
+    public ItemCategory getItemCategoryById(Long id) {
+        return itemCategoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Item Category not found"));
     }
 
-    public List<ItemCategoryResponseDto> getAllItemCategories() {
-        return itemCategoryRepository.findAll().stream()
-                .map(category -> new ItemCategoryResponseDto(category.getCategoryId(), category.getName()))
-                .collect(Collectors.toList());
+    public List<ItemCategory> getAllItemCategories() {
+        return itemCategoryRepository.findAll();
     }
 
-    public ItemCategoryResponseDto updateItemCategory(Long id, ItemCategoryCreateDto itemCategoryCreateDto) {
-        ItemCategory category = itemCategoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Item Category not found"));
-        category.setName(itemCategoryCreateDto.getName());
-        category = itemCategoryRepository.save(category);
-        return new ItemCategoryResponseDto(category.getCategoryId(), category.getName());
+    public ItemCategory updateItemCategory(Long id, String name) {
+        ItemCategory category = getItemCategoryById(id);
+        category.setName(name);
+        return itemCategoryRepository.save(category);
     }
 
     public void deleteItemCategory(Long id) {

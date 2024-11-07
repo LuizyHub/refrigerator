@@ -1,5 +1,6 @@
 package com.refrigerator.state.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,6 @@ import lombok.Setter;
 @Getter
 public class StateCreateDto {
 
-    // Getters and Setters
     private String name;
 
 }
