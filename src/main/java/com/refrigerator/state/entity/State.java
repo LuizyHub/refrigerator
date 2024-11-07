@@ -27,8 +27,8 @@ public class State {
         return new State(name);
     }
 
-    // Optional: Business method to update the name
-    public void updateName(String name) {
-        this.name = name;
-    }
+//    // Optional: Business method to update the name
+//    public void updateName(String name) {
+//        this.name = name;
+//    }
 }

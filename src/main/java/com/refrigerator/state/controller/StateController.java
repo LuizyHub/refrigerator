@@ -49,13 +49,13 @@ public class StateController {
         return "redirect:/states";  // 상태 목록 페이지로 리다이렉트
     }
 
-//    // 특정 State 상세 페이지
-//    @GetMapping("/{id}")
-//    public String getStateById(@PathVariable Long id, Model model) {
-//        String state = stateService.getStateById(id);
-//        model.addAttribute("state", state);
-//        return "states/detail";  // states/detail.html 뷰로 이동
-//    }
+    // 특정 State 상세 페이지
+    @GetMapping("/{state_id}")
+    public String getStateById(@PathVariable Long id, Model model) {
+        State state = stateService.getStateById(id);
+        model.addAttribute("state", state);
+        return "states/detail";  // states/detail.html 뷰로 이동
+    }
 
 //    // 특정 State 업데이트 폼 페이지
 //    @GetMapping("/{id}/edit")
@@ -65,7 +65,7 @@ public class StateController {
 //        return "states/edit";  // states/edit.html 뷰로 이동
 //    }
 
-    // 특정 State 업데이트 처리
+//    // 특정 State 업데이트 처리
 //    @PostMapping("/{id}/edit")
 //    public String updateState(
 //            @PathVariable Long id,

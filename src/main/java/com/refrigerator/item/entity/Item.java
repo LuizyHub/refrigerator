@@ -1,13 +1,13 @@
 package com.refrigerator.item.entity;
 
-import com.refrigerator.itemCategory.entity.ItemCategory;
 import com.refrigerator.state.entity.State;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Item {
 
@@ -24,4 +24,10 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "state_id", nullable = false)
     private State state;
+
+    public Item(String name, ItemCategory category, State state) {
+        this.name = name;
+        this.category = category;
+        this.state = state;
+    }
 }

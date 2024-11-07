@@ -1,11 +1,12 @@
-package com.refrigerator.itemCategory.entity;
+package com.refrigerator.item.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ItemCategory {
 
@@ -15,4 +16,8 @@ public class ItemCategory {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    public ItemCategory(String name) {
+        this.name = name;
+    }
 }

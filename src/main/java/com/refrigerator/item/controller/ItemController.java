@@ -1,8 +1,11 @@
 package com.refrigerator.item.controller;
 
+import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.item.dto.ItemCreateDto;
 import com.refrigerator.item.entity.Item;
 import com.refrigerator.item.service.ItemService;
+import com.refrigerator.member.entity.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,14 +15,11 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
 
     private final ItemService itemService;
-
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
 
     // 모든 Item 리스트 페이지
     @GetMapping
@@ -31,7 +31,9 @@ public class ItemController {
 
     // 새 Item 생성 폼 페이지
     @GetMapping("/new")
-    public String createItemForm(@ModelAttribute("item") ItemCreateDto itemCreateDto) {
+    public String createItemForm(
+            @CurrentMember Member member, // 로그인이 필요한 부분은 이 부분 추가
+            @ModelAttribute("item") ItemCreateDto itemCreateDto) {
         return "items/new";  // items/new.html 뷰로 이동
     }
 
@@ -50,7 +52,7 @@ public class ItemController {
     }
 
     // 특정 Item 상세 페이지
-    @GetMapping("/{id}")
+    @GetMapping("/{item_id}")
     public String getItemById(@PathVariable Long id, Model model) {
         Item item = itemService.getItemById(id);
         model.addAttribute("item", item);

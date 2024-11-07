@@ -2,11 +2,12 @@ package com.refrigerator.item.service;
 
 import com.refrigerator.item.dto.ItemCreateDto;
 import com.refrigerator.item.entity.Item;
+import com.refrigerator.item.repository.ItemCategoryRepository;
 import com.refrigerator.item.repository.ItemRepository;
-import com.refrigerator.itemCategory.repository.ItemCategoryRepository;
 import com.refrigerator.state.repository.StateRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ItemService {
@@ -23,12 +24,20 @@ public class ItemService {
 
     public void createItem(ItemCreateDto itemCreateDto) {
         var category = itemCategoryRepository.findById(itemCreateDto.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
         var state = stateRepository.findById(itemCreateDto.getStateId())
-                .orElseThrow(() -> new EntityNotFoundException("State not found"));
+                .orElseThrow(() -> new IllegalArgumentException("State not found"));
 
-        // Use the toItem method from ItemCreateDto
         Item item = itemCreateDto.toItem(category, state);
         itemRepository.save(item);
+    }
+
+    public List<Item> getAllItems() {
+        return itemRepository.findAll();
+    }
+
+    public Item getItemById(Long id) {
+        return itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Item not found"));
     }
 }
