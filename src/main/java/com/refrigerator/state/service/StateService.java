@@ -21,9 +21,9 @@ public class StateService {
         return stateRepository.findAll();
     }
 
-    public State createState(StateCreateDto stateCreateDto) {
+    public void createState(StateCreateDto stateCreateDto) {
         State state = State.of(stateCreateDto.getName());
-        return stateRepository.save(state);  // 생성된 State 반환
+        stateRepository.save(state);
     }
 
     public State getStateById(Long id) {
@@ -33,7 +33,7 @@ public class StateService {
 
 //    public State updateState(Long id, StateCreateDto stateCreateDto) {
 //        State state = stateRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("State not found"));
+//                .orElseThrow(() -> new IllegalArgumentException("State not found"));
 //        state.updateName(stateCreateDto.getName());
 //        return stateRepository.save(state);  // 업데이트된 State 반환
 //    }
