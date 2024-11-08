@@ -52,7 +52,7 @@ public class ItemController {
     }
 
     // 특정 Item 상세 페이지
-    @GetMapping("/{item_id}")
+    @GetMapping("/{itemId}")
     public String getItemById(@PathVariable Long id, Model model) {
         Item item = itemService.getItemById(id);
         model.addAttribute("item", item);

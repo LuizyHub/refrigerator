@@ -2,8 +2,10 @@ package com.refrigerator.item.service;
 
 import com.refrigerator.item.dto.ItemCreateDto;
 import com.refrigerator.item.entity.Item;
+import com.refrigerator.item.entity.ItemCategory;
 import com.refrigerator.item.repository.ItemCategoryRepository;
 import com.refrigerator.item.repository.ItemRepository;
+import com.refrigerator.state.entity.State;
 import com.refrigerator.state.repository.StateRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +25,9 @@ public class ItemService {
     }
 
     public void createItem(ItemCreateDto itemCreateDto) {
-        var category = itemCategoryRepository.findById(itemCreateDto.getCategoryId())
+        ItemCategory category = itemCategoryRepository.findById(itemCreateDto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-        var state = stateRepository.findById(itemCreateDto.getStateId())
+        State state = stateRepository.findById(itemCreateDto.getStateId())
                 .orElseThrow(() -> new IllegalArgumentException("State not found"));
 
         Item item = itemCreateDto.toItem(category, state);
