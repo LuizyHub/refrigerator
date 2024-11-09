@@ -1,54 +1,73 @@
 package com.refrigerator.recipe.service;
 
 import com.refrigerator.common.resolver.CurrentMember;
+import com.refrigerator.item.dto.ItemCreateDto;
+import com.refrigerator.item.entity.Item;
+import com.refrigerator.item.entity.ItemCategory;
 import com.refrigerator.member.entity.Member;
 import com.refrigerator.member.repository.MemberRepository;
 import com.refrigerator.recipe.dto.RecipeCreateDto;
 import com.refrigerator.recipe.entity.Recipe;
+import com.refrigerator.recipe.entity.RecipeCategory;
+import com.refrigerator.recipe.repository.RecipeCategoryRepository;
 import com.refrigerator.recipe.repository.RecipeRepository;
-import com.refrigerator.recipeCategory.repository.RecipeCategoryRepository;
+import com.refrigerator.recipe.repository.RecipeCategoryRepository;
+import com.refrigerator.state.entity.State;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
 public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeCategoryRepository recipeCategoryRepository;
-    private final MemberRepository memberRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, RecipeCategoryRepository recipeCategoryRepository, MemberRepository memberRepository) {
+    public RecipeService(RecipeRepository recipeRepository, RecipeCategoryRepository recipeCategoryRepository) {
         this.recipeRepository = recipeRepository;
         this.recipeCategoryRepository = recipeCategoryRepository;
-        this.memberRepository = memberRepository;
     }
 
-    public Recipe createRecipe(@CurrentMember Member member, RecipeCreateDto recipeCreateDto) {
-        Recipe recipe = new Recipe();
-        recipe.setName(member.getName());
-        recipe.setMember(member);
+    // 새로운 Recipe 생성
+    public void createRecipe(@CurrentMember Member member, RecipeCreateDto recipeCreateDto) {
 
-        return recipeRepository.save(recipe);
+        if(member == null) {
+            throw new EntityNotFoundException("Member is null");
+        }
+
+        // 카테고리 조회 => 조회 안되면 새로 생성하는 로직 필요
+        Set<RecipeCategory> categories = recipeCategoryRepository.getCategoryIds().stream()
+                .map(categoryId -> recipeCategoryRepository.findById((Integer) categoryId)
+                        .orElseThrow(() -> new IllegalArgumentException("Category not found: " + categoryId)))
+                .collect(Collectors.toSet());
+
+        // Recipe 객체 생성
+        Recipe recipe = recipeCreateDto.toRecipe(member, categories);
+        // Recipe 저장
+        recipeRepository.save(recipe);
     }
 
+    //특정 레시피 조회
     public Recipe getRecipeById(Long id) {
-        return recipeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Recipe not found"));
+        return recipeRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Recipe not found"));
     }
 
+    // 모든 레시피 조회
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
-
 }
 
-
-//public Item getItemById(Long id) {
-//    return itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Item not found"));
-//}
+//public void createItem(ItemCreateDto itemCreateDto) {
+//    ItemCategory category = itemCategoryRepository.findById(itemCreateDto.getCategoryId())
+//            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+//    State state = stateRepository.findById(itemCreateDto.getStateId())
+//            .orElseThrow(() -> new IllegalArgumentException("State not found"));
 //
-//public List<Item> getAllItems() {
-//    return itemRepository.findAll();
-//}
+//    Item item = itemCreateDto.toItem(category, state);
+//    itemRepository.save(item);
 //}

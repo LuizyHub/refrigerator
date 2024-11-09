@@ -1,25 +1,40 @@
 package com.refrigerator.recipe.entity;
 
-//import com.refrigerator.itemCategory.entity.ItemCategory;
-import com.refrigerator.member.entity.Member;
-//import com.refrigerator.state.entity.State;
 import jakarta.persistence.*;
-import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
+@Setter
+@Table(name = "recipe")
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Integer recipeId;
 
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Member member;
-}
+    @Column(nullable = false)
+    private Long userId;
 
-//name, category, state
+    @ManyToMany
+    @JoinTable(
+            name = "r_rcategory",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<RecipeCategory> categories = new HashSet<>();
+
+    //기본 생성자 (JPA 사용)
+    public Recipe(){};
+
+    //생성자 (toRecipe 사용)
+    public Recipe(String name, Set<RecipeCategory> categories, Long userId) {
+        this.name = name;
+        this.categories = categories;
+        this.userId = userId;
+    }
+}
