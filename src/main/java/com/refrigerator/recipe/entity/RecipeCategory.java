@@ -8,6 +8,7 @@ import java.util.Set;
 @Entity
 @Table(name = "recipe_category")
 public class RecipeCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;

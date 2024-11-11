@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//만들 수 있는 레시피 조회
 
-
+// form => update, delete
 @Controller
 @RequestMapping("/recipes")
 
@@ -58,7 +57,28 @@ public class RecipeController {
     public String getRecipeById(@PathVariable Long recipeId, Model model) {
         Recipe recipe = recipeService.getRecipeById(recipeId);
         model.addAttribute("recipe", recipe);
-        return "recipes/detail";
+        return "recipes/{recipeId}";
+    }
+
+    @GetMapping ("/{recipeId}/edit")
+    public String editForm(@PathVariable Long recipeId, Model model) {
+        Recipe recipe = recipeService.getRecipeById(recipeId);
+        model.addAttribute("recipe", recipe);
+        return "recipes/editForm";
+    }
+
+
+    @PostMapping("/{recipeId}/edit")
+    public String edit(
+            @PathVariable Long recipeId,
+            @Valid @ModelAttribute("recipe") RecipeCreateDto recipeCreateDto,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "recipes/editForm";
+        }
+        //recipeParam 객체 생성
+        //recipeRepository.update(recipeId, recipeParam);
+        return "redirect:/recipeId";
     }
 
     //모든 레시피 조회

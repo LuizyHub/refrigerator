@@ -12,7 +12,7 @@ import java.util.Set;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer recipeId;
+    private Long recipeId;
 
     @Column(nullable = false, length = 100)
     private String name;
@@ -26,10 +26,8 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<RecipeCategory> categories = new HashSet<>();
 
-    //기본 생성자 (JPA 사용)
-    public Recipe(){};
+    private Set<RecipeCategory> categories = new HashSet<>();
 
     //생성자 (toRecipe 사용)
     public Recipe(String name, Set<RecipeCategory> categories, Long userId) {
@@ -37,4 +35,6 @@ public class Recipe {
         this.categories = categories;
         this.userId = userId;
     }
+    //기본 생성자 (JPA 사용)
+    public Recipe() {}
 }
