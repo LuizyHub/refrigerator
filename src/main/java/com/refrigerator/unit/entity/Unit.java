@@ -19,18 +19,21 @@ public class Unit {
     @Column(nullable = false, unique = true)
     private String name;  // 단위 이름 (예: kg, g, oz 등)
 
-    @ManyToOne
-    @JoinColumn(name = "state_id", nullable = false)
-    private State state;
+    @Column(nullable = false)
+    private Integer stateId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "state_id", nullable = false)
+//    private State state;
 
 
-    public Unit(String name, State state) {
+    public Unit(String name, Integer stateId) {
         this.name = name;
-        this.state = state;
+        this.stateId = stateId;
     }
 
     // Factory method (static 메서드로 객체 생성)
-    public static Unit of(String name, State state) {
-        return new Unit(name, state);
+    public static Unit of(String name, Integer stateId) {
+        return new Unit(name, stateId);
     }
 }

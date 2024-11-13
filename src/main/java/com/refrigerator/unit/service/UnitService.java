@@ -27,8 +27,7 @@ public class UnitService {
   // Unit을 생성하는 메서드
   public Unit createUnit(UnitCreateDto unitCreateDto) {
     // UnitCreateDto로부터 단위 정보 받아서 새로운 Unit 생성
-    State state = new State();
-    Unit unit = Unit.of(unitCreateDto.getName(), state);
+    Unit unit = Unit.of(unitCreateDto.getName(), unitCreateDto.getStateId());
     return unitRepository.save(unit);  // Unit 저장 후 반환
   }
 
