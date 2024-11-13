@@ -32,13 +32,13 @@ public class UnitService {
   }
 
   // 특정 id에 해당하는 Unit을 조회하는 메서드
-  public Unit getUnitById(Long id) {
+  public Unit getUnitById(Integer id) {
     return unitRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Unit not found"));  // Unit을 못 찾을 경우 예외 발생
   }
 
   // 특정 Unit 삭제하는 메서드
-  public void deleteUnit(Long id) {
+  public void deleteUnit(Integer id) {
     unitRepository.deleteById(id);  // UnitRepository에서 id로 Unit 삭제
   }
 }

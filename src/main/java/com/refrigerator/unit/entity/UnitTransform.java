@@ -8,22 +8,29 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "unit_transform")
+@IdClass(UnitTransformId.class)
 public class UnitTransform {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long unitTransformId;
-
     @ManyToOne
-    @JoinColumn(name = "unit_id")
-    private Unit unit;  // 참조하는 Unit 엔티티
+    @JoinColumn(name = "from_unit_id", referencedColumnName = "unitId", nullable = false)
+    private Unit fromUnit;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "to_unit_id", referencedColumnName = "unitId", nullable = false)
+    private Unit toUnit;
 
     @Column(nullable = false)
-    private double conversionRate; // 변환 비율 (예: 1 kg = 1000 g)
+    private double ratio; // 변환 비율 (예: 1 kg = 1000 g)
 
-    // 생성자
-    public UnitTransform(Unit unit, double conversionRate) {
-        this.unit = unit;
-        this.conversionRate = conversionRate;
+    public UnitTransform(Unit fromUnit, Unit toUnit, double ratio) {
+        this.fromUnit = fromUnit;
+        this.toUnit = toUnit;
+        this.ratio = ratio;
+    }
+
+    public static UnitTransform of(Unit fromUnit, Unit toUnit, double ratio) {
+        return new UnitTransform(fromUnit, toUnit, ratio);
     }
 }

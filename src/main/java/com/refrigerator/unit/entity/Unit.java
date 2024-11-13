@@ -14,7 +14,7 @@ public class Unit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long unitId;  // 단위 ID
+    private Integer unitId;  // 단위 ID
 
     @Column(nullable = false, unique = true)
     private String name;  // 단위 이름 (예: kg, g, oz 등)

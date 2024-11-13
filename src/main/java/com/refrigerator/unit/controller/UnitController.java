@@ -51,7 +51,7 @@ public class UnitController {
 
     // 특정 Unit의 상세 페이지
     @GetMapping("/{unitId}")
-    public String getUnitById(@PathVariable Long unitId, Model model) {
+    public String getUnitById(@PathVariable Integer unitId, Model model) {
         Unit unit = unitService.getUnitById(unitId);
         model.addAttribute("unit", unit);
         return "units/detail";  // units/detail.html 뷰로 이동
@@ -59,7 +59,7 @@ public class UnitController {
 
     // 특정 Unit 삭제 처리
     @DeleteMapping("/{unitId}/delete")
-    public String deleteUnit(@PathVariable Long unitId) {
+    public String deleteUnit(@PathVariable Integer unitId) {
         unitService.deleteUnit(unitId);
         return "redirect:/units";  // 목록 페이지로 리다이렉트
     }

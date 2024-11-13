@@ -4,20 +4,22 @@ import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @Embeddable
 @EqualsAndHashCode
-public class UnitTransformId {
+public class UnitTransformId implements Serializable {
 
-    private Long unitId;
-    private Long targetUnitId;
+    private Integer fromUnit;
+    private Integer toUnit;
 
     // 기본 생성자
     public UnitTransformId() {}
 
     // 생성자
-    public UnitTransformId(Long unitId, Long targetUnitId) {
-        this.unitId = unitId;
-        this.targetUnitId = targetUnitId;
+    public UnitTransformId(Integer fromUnitId, Integer toUnitId) {
+        this.fromUnit = fromUnitId;
+        this.toUnit = toUnitId;
     }
 }
