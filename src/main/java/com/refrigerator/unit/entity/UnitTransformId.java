@@ -1,33 +1,23 @@
 package com.refrigerator.unit.entity;
 
 import jakarta.persistence.Embeddable;
-import java.io.Serializable;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@Getter
 @Embeddable
-public class UnitTransformId implements Serializable {
+@EqualsAndHashCode
+public class UnitTransformId {
 
-    private Integer fromUnitId;
-    private Integer toUnitId;
+    private Long unitId;
+    private Long targetUnitId;
 
+    // 기본 생성자
     public UnitTransformId() {}
 
-    public UnitTransformId(Integer fromUnitId, Integer toUnitId) {
-        this.fromUnitId = fromUnitId;
-        this.toUnitId = toUnitId;
-    }
-
-    // Getters, Setters, equals, and hashCode
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UnitTransformId that = (UnitTransformId) o;
-        return Objects.equals(fromUnitId, that.fromUnitId) && Objects.equals(toUnitId, that.toUnitId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(fromUnitId, toUnitId);
+    // 생성자
+    public UnitTransformId(Long unitId, Long targetUnitId) {
+        this.unitId = unitId;
+        this.targetUnitId = targetUnitId;
     }
 }

@@ -1,29 +1,29 @@
 package com.refrigerator.unit.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@NoArgsConstructor
 @Table(name = "unit_transform")
 public class UnitTransform {
 
-    @EmbeddedId
-    private UnitTransformId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long unitTransformId;
 
     @ManyToOne
-    @MapsId("fromUnitId")
-    @JoinColumn(name = "from_unit_id", nullable = false)
-    private Unit fromUnit;
-
-    @ManyToOne
-    @MapsId("toUnitId")
-    @JoinColumn(name = "to_unit_id", nullable = false)
-    private Unit toUnit;
+    @JoinColumn(name = "unit_id")
+    private Unit unit;  // 참조하는 Unit 엔티티
 
     @Column(nullable = false)
-    private Double ratio;
+    private double conversionRate; // 변환 비율 (예: 1 kg = 1000 g)
+
+    // 생성자
+    public UnitTransform(Unit unit, double conversionRate) {
+        this.unit = unit;
+        this.conversionRate = conversionRate;
+    }
 }

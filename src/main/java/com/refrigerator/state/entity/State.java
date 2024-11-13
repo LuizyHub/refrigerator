@@ -19,6 +19,7 @@ public class State {
     @Column(nullable = false, unique = true)
     private String name;
 
+
     private State(String name) {
         this.name = name;
     }
