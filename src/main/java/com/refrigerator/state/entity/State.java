@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)  // JPA 사용을 위한 기본 생성자 (protected)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)  // JPA 사용을 위한 기본 생성자 (protected)
 @Table(name = "state")
 public class State {
 

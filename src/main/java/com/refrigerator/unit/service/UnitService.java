@@ -1,5 +1,7 @@
 package com.refrigerator.unit.service;
 
+import com.refrigerator.state.entity.State;
+import com.refrigerator.state.repository.StateRepository;
 import com.refrigerator.unit.dto.UnitCreateDto;
 import com.refrigerator.unit.entity.Unit;
 import com.refrigerator.unit.repository.UnitRepository;
@@ -25,7 +27,8 @@ public class UnitService {
   // Unit을 생성하는 메서드
   public Unit createUnit(UnitCreateDto unitCreateDto) {
     // UnitCreateDto로부터 단위 정보 받아서 새로운 Unit 생성
-    Unit unit = Unit.of(unitCreateDto.getName(), unitCreateDto.getSymbol());
+    State state = new State();
+    Unit unit = Unit.of(unitCreateDto.getName(), state);
     return unitRepository.save(unit);  // Unit 저장 후 반환
   }
 

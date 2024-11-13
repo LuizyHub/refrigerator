@@ -1,5 +1,6 @@
 package com.refrigerator.unit.entity;
 
+import com.refrigerator.state.entity.State;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,17 +19,18 @@ public class Unit {
     @Column(nullable = false, unique = true)
     private String name;  // 단위 이름 (예: kg, g, oz 등)
 
-    @Column(nullable = false)
-    private String symbol;  // 단위 기호 (예: kg -> "kg", g -> "g" 등)
+    @ManyToOne
+    @JoinColumn(name = "state_id", nullable = false)
+    private State state;
 
-    // 생성자 (protected 접근 제한자로, 외부에서 직접 생성하지 못하게 함)
-    private Unit(String name, String symbol) {
+
+    public Unit(String name, State state) {
         this.name = name;
-        this.symbol = symbol;
+        this.state = state;
     }
 
     // Factory method (static 메서드로 객체 생성)
-    public static Unit of(String name, String symbol) {
-        return new Unit(name, symbol);
+    public static Unit of(String name, State state) {
+        return new Unit(name, state);
     }
 }
