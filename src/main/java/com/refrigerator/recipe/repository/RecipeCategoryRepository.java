@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface RecipeCategoryRepository extends JpaRepository<RecipeCategory, Integer> {
 
     // id로 RecipeCategory 조회
-    Optional<RecipeCategory> findById(Integer categoryId);
+//    Optional<RecipeCategory> findById(Integer categoryId);
     Optional<RecipeCategory> findByName(String name);
 
-    Optional<Object> getCategoryIds();
+
 }

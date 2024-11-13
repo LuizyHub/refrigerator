@@ -33,7 +33,7 @@ public class RecipeController {
     }
 
     //새로운 레시피 생성 폼
-    @PostMapping("/new")
+    @GetMapping("/new")
     public String createRecipe(
             @ModelAttribute("recipe") RecipeCreateDto recipeCreateDto) {
         return "recipes/new";
