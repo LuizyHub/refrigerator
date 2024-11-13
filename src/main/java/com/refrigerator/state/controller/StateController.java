@@ -50,25 +50,25 @@ public class StateController {
     }
 
     // 특정 State 상세 페이지
-    @GetMapping("/{state_id}")
-    public String getStateById(@PathVariable Long id, Model model) {
-        State state = stateService.getStateById(id);
+    @GetMapping("/{stateId}")
+    public String getStateById(@PathVariable Long stateId, Model model) {
+        State state = stateService.getStateById(stateId);
         model.addAttribute("state", state);
         return "states/detail";  // states/detail.html 뷰로 이동
     }
 
 //    // 특정 State 업데이트 폼 페이지
-//    @GetMapping("/{id}/edit")
-//    public String editStateForm(@PathVariable Long id, Model model) {
-//        String state = stateService.getStateById(id);
+//    @GetMapping("/{stateId}/edit")
+//    public String editStateForm(@PathVariable Long stateId, Model model) {
+//        State state = stateService.getStateById(stateId);
 //        model.addAttribute("state", state);
 //        return "states/edit";  // states/edit.html 뷰로 이동
 //    }
-
+//
 //    // 특정 State 업데이트 처리
-//    @PostMapping("/{id}/edit")
+//    @PostMapping("/{stateId}/edit")
 //    public String updateState(
-//            @PathVariable Long id,
+//            @PathVariable Long stateId,
 //            @Valid @ModelAttribute("state") StateCreateDto stateCreateDto,
 //            BindingResult bindingResult
 //    ) {
@@ -76,14 +76,14 @@ public class StateController {
 //            return "states/edit";  // 유효성 검사 실패 시 다시 폼으로 이동
 //        }
 //
-//        stateService.updateState(id, stateCreateDto);
+//        stateService.updateState(stateId, stateCreateDto);
 //        return "redirect:/states";  // 상태 목록 페이지로 리다이렉트
 //    }
 
     // 특정 State 삭제
-    @PostMapping("/{id}/delete")
-    public String deleteState(@PathVariable Long id) {
-        stateService.deleteState(id);
+    @PostMapping("/{stateId}/delete")
+    public String deleteState(@PathVariable Long stateId) {
+        stateService.deleteState(stateId);
         return "redirect:/states";  // 상태 목록 페이지로 리다이렉트
     }
 }
