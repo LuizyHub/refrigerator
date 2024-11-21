@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+
+    <!-- 재고 목록 테이블 -->
+    <table th:if="${inventories}">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>수량</th>
+            <th>단위</th>
+            <th>유통기한</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 각 재고 목록을 반복 출력 -->
+        <tr th:each="inventory : ${inventories}">
+            <td>
+                <span th:text="${inventory.itemName}"></span> <!-- 타임리프를 사용해 데이터 출력 -->
+            </td>
+
+            <td>
+                <span th:text="${inventory.amount}"></span>
+            </td>
+
+            <td>
+                <span th:text="${inventory.unitName}"></span>
+            </td>
+
+            <td>
+                <span th:if="${inventory.endAt}" th:text="${inventory.endAt}"></span>
+                <span th:unless="${inventory.endAt}">유통기한 없음</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</main>
+</body>
+</html>
