@@ -12,6 +12,8 @@
                 <button onclick="location.href='/register'">Register</button>
             </div>
             <div th:if="${session.loginMemberId != null}">
+                <button onclick="location.href='/refrigerators'">냉장고</button>
+                <button onclick="location.href='/recipes'">레시피</button>
                 <span th:text="'Hello, ' + ${session.loginMemberName} + '!'">Hello, User!</span>
                 <form th:action="@{/logout}" method="post" style="display: inline;">
                     <button type="submit">Logout</button>
