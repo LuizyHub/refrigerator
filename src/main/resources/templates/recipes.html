@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+  <h2>레시피</h2>
+  <div>
+    <!-- 레시피 생성 버튼 -->
+    <button type="button" onclick="window.location.href='/recipes/new'">레시피 생성</button>
+  </div>
+  <br>
+
+  <!-- 카테고리 필터 -->
+  <div>
+    <form id="categoryForm" th:action="@{/recipes}" method="get" onsubmit="return filterCategories()">
+      <div>
+        <label>
+          <input type="checkbox" id="selectAll" name="categoryId" value=""
+                 th:onclick="'this.form.submit()'"
+                 th:checked="${selectedCategoryIds == null}"> 전체
+        </label>
+      </div>
+      <div th:each="category : ${categories}">
+        <label>
+          <input type="checkbox" name="categoryId"
+                 th:value="${category.categoryId}"
+                 th:onclick="'this.form.submit()'"
+                 th:checked="${selectedCategoryIds != null and #lists.contains(selectedCategoryIds, category.categoryId)}"
+                 onchange="handleCategoryChange(this)">
+          <span th:text="${category.name}">카테고리 이름</span>
+        </label>
+      </div>
+    </form>
+  </div>
+
+  <!-- 레시피 목록 -->
+  <table>
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>레시피 이름</th>
+      <th>카테고리</th>
+      <th>조회</th>
+      <th>삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="recipe, iterStat : ${recipes}">
+      <td th:text="${iterStat.index + 1}">1</td>
+      <td th:text="${recipe.name}">레시피 이름</td>
+      <td>
+        <span th:if="${!#lists.isEmpty(recipe.categories)}">
+          <span th:each="category, iterStat : ${recipe.categories}">
+            <span th:text="${category.name}">카테고리 이름</span>
+            <span th:if="${!iterStat.last}">, </span>
+          </span>
+        </span>
+        <span th:if="${#lists.isEmpty(recipe.categories)}">카테고리 없음</span>
+      </td>
+      <td>
+        <a th:href="@{|/recipes/${recipe.recipeId}|}">상세보기</a>
+      </td>
+      <td>
+        <form th:action="@{|/recipes/${recipe.recipeId}/delete|}" method="post" style="display:inline;">
+          <button type="submit">삭제</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+
+<script>
+  function handleCategoryChange(checkbox) {
+    const selectAllCheckbox = document.getElementById("selectAll");
+    if (checkbox.checked) {
+      selectAllCheckbox.checked = false; // 다른 카테고리가 선택되면 "전체" 해제
+    } else {
+      const anyCheckboxChecked = Array.from(document.querySelectorAll('input[name="categoryId"]'))
+              .some(cb => cb.checked);
+      selectAllCheckbox.checked = !anyCheckboxChecked; // 모든 카테고리가 해제되면 "전체" 체크
+    }
+  }
+
+  function filterCategories() {
+    const checkboxes = document.querySelectorAll('input[name="categoryId"]');
+    const selectedCategories = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+
+    // 모든 카테고리 체크박스가 해제된 경우 "전체" 체크박스를 선택
+    if (selectedCategories.length === 0) {
+      document.getElementById("selectAll").checked = true;
+    }
+
+    // 쿼리 파라미터를 수동으로 설정하기 위해 form에서 기존 categoryId 제거
+    const form = document.getElementById("categoryForm");
+    const formData = new FormData(form);
+    formData.delete('categoryId'); // 기존 categoryId 삭제
+
+    selectedCategories.forEach(categoryId => {
+      formData.append('categoryId', categoryId); // 선택된 카테고리만 추가
+    });
+
+    // URL을 업데이트
+    const params = new URLSearchParams(formData).toString();
+    window.location.href = form.action + '?' + params; // 새 URL로 이동
+    return false; // 폼의 기본 제출 방지
+  }
+</script>
+
+</body>
+</html>
