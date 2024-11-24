@@ -12,8 +12,11 @@ import lombok.Setter;
 @Setter
 public class ItemCreateDto {
 
-    @NotBlank
+    @NotBlank(message = "아이템 이름은 필수 입력값입니다.")
     private String name;
+
+    @NotBlank(message = "아이템 상태는 필수 입력값입니다.")
+    private String state;
     
     private Long categoryId;
 
