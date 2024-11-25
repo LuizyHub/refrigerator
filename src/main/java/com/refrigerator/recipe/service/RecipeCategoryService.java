@@ -18,7 +18,7 @@ public class RecipeCategoryService {
             throw new IllegalArgumentException("Category with name '" + name + "' already exists.");
         }
 
-        // 생성자를 사용하여 ItemCategory 객체 생성
+        // 생성자를 사용하여 RecipeCategory 객체 생성
         RecipeCategory category = new RecipeCategory(name);
         return recipeCategoryRepository.save(category);
     }

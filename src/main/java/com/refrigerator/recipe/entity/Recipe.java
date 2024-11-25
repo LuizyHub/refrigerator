@@ -1,6 +1,8 @@
 package com.refrigerator.recipe.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -8,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Setter
+@Getter
 @Table(name = "recipe")
 public class Recipe {
     @Id

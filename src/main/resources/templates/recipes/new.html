@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+  <!-- 레시피 생성 제목 -->
+  <h1>레시피 생성</h1>
+  <!-- 레시피 생성 폼 -->
+  <form th:action="@{/recipes/new}" th:object="${recipe}" method="post">
+    <!-- 레시피 이름 -->
+    <div>
+      <label for="name">레시피 이름</label>
+      <input type="text" id="name" name="name" th:field="*{name}" placeholder="레시피 이름을 입력하세요" required />
+    </div>
+    <br>
+
+    <!-- 카테고리 입력 -->
+    <div>
+      <label for="categories">카테고리</label>
+      <input type="text" id="categories" name="categoryNames" th:field="*{categoryNames}"
+             placeholder="쉼표로 구분된 카테고리를 입력하세요 (예: 한식, 중식)" />
+    </div>
+    <br>
+
+    <!-- 폼 버튼들 -->
+    <div>
+      <button type="submit" class="button">레시피 생성</button> <!-- 생성 버튼 -->
+      <button type="button" class="button button-secondary" onclick="window.location.href='/recipes'">취소</button> <!-- 취소 버튼 -->
+    </div>
+  </form>
+</main>
+
+</body>
+</html>

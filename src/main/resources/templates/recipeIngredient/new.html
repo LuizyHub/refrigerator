@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header>
+
+<main class="container">
+  <h2>재료 추가</h2>
+
+  <form th:action="@{|/recipes/${recipeId}/ingredients/save|}" method="post">
+    <p>
+      <strong>아이템:</strong>
+      <span th:text="${item.name}"></span>
+    </p>
+
+    <!-- 단위 선택 -->
+    <label for="unitId">단위:</label>
+    <select id="unitId" name="unitId" required>
+      <option value="" disabled selected>단위를 선택하세요</option>
+      <option th:each="unit : ${units}" th:value="${unit.id}" th:text="${unit.name}"></option>
+    </select>
+
+    <!-- 용량 입력 -->
+    <label for="amount">용량:</label>
+    <input type="number" id="amount" name="amount" min="0.1" step="0.1" required>
+
+    <button type="submit">추가</button>
+  </form>
+</main>
+</body>
+</html>

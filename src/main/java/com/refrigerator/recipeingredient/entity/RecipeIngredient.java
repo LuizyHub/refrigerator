@@ -1,20 +1,19 @@
-package com.refrigerator.recipeIngredient.entity;
+package com.refrigerator.recipeingredient.entity;
 
 import com.refrigerator.item.entity.Item;
 import com.refrigerator.recipe.entity.Recipe;
-import com.refrigerator.recipeIngredient.dto.RecipeIngredientDto;
 import com.refrigerator.unit.entity.Unit;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
-@Builder
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "recipe_ingredient")
-public class RecipeIngredient {
+public class RecipeIngredient{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +32,5 @@ public class RecipeIngredient {
     private Unit unit;
 
     @Column(nullable = false)
-    private double amount;
-
+    private Double amount;
 }

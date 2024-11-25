@@ -1,16 +1,17 @@
 package com.refrigerator.recipe.service;
 
-import com.refrigerator.common.resolver.CurrentMember;
+import com.refrigerator.item.repository.ItemRepository;
 import com.refrigerator.member.entity.Member;
 import com.refrigerator.recipe.dto.RecipeCreateDto;
 import com.refrigerator.recipe.entity.Recipe;
 import com.refrigerator.recipe.entity.RecipeCategory;
 import com.refrigerator.recipe.repository.RecipeCategoryRepository;
 import com.refrigerator.recipe.repository.RecipeRepository;
+import com.refrigerator.unit.repository.UnitRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,30 +19,30 @@ import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class RecipeService {
   private final RecipeRepository recipeRepository;
   private final RecipeCategoryRepository recipeCategoryRepository;
-
-  public RecipeService(RecipeRepository recipeRepository, RecipeCategoryRepository recipeCategoryRepository) {
-    this.recipeRepository = recipeRepository;
-    this.recipeCategoryRepository = recipeCategoryRepository;
-  }
+  private final ItemRepository itemRepository;
+  private final UnitRepository unitRepository;
 
   // 새로운 Recipe 생성
-  public void createRecipe(@CurrentMember Member member, RecipeCreateDto recipeCreateDto) {
+  public void createRecipe(Member member, RecipeCreateDto recipeCreateDto) {
 
     if (member == null) {
       throw new EntityNotFoundException("Member is null");
     }
 
-    // 카테고리 조회 => 조회 안되면 새로 생성하는 로직 필요
-    Set<RecipeCategory> categories = recipeCreateDto.getCategoryIds().stream()
-        .map(categoryId -> recipeCategoryRepository.findById(categoryId.intValue())
-            .orElseThrow(() -> new IllegalArgumentException("Category not found: " + categoryId)))
-        .collect(Collectors.toSet());
+    Set<RecipeCategory> categories = Optional.ofNullable(recipeCreateDto.getCategoryNames())
+            .orElse(Set.of()) // categoryNames가 null이면 빈 Set 반환
+            .stream() // Set<String>을 Stream<String>으로 변환
+            .map(name -> recipeCategoryRepository.findByName(name.trim()) // 이름으로 카테고리 조회
+                    .orElseGet(() -> recipeCategoryRepository.save(new RecipeCategory(name.trim())))) // 없으면 생성
+            .collect(Collectors.toSet()); // 최종적으로 Set<RecipeCategory>로 변환
+
 
     // Recipe 객체 생성
-    Recipe recipe = recipeCreateDto.toRecipe(member, categories);
+    Recipe recipe = recipeCreateDto.toRecipe(member.getUserId(), categories);
     // Recipe 저장
     recipeRepository.save(recipe);
   }
@@ -52,18 +53,26 @@ public class RecipeService {
         orElseThrow(() -> new IllegalArgumentException("Recipe not found"));
   }
 
-  // 모든 레시피 조회
-  public List<Recipe> getAllRecipes() {
-    return recipeRepository.findAll();
+  public List<Recipe> getRecipesByCategoryIdsAndUserId(List<Long> categoryIds, Long userId) {
+    List<RecipeCategory> categories = recipeCategoryRepository.findAllByCategoryIdIn(categoryIds);
+    return recipeRepository.findAllByCategoriesInAndUserId(categories, userId);
   }
-}
 
-//public void createItem(ItemCreateDto itemCreateDto) {
-//    ItemCategory category = itemCategoryRepository.findById(itemCreateDto.getCategoryId())
-//            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-//    State state = stateRepository.findById(itemCreateDto.getStateId())
-//            .orElseThrow(() -> new IllegalArgumentException("State not found"));
-//
-//    Item item = itemCreateDto.toItem(category, state);
-//    itemRepository.save(item);
-//}
+  public List<Recipe> getAllRecipesByUserId(Long userId) {
+    return recipeRepository.findAllByUserId(userId);
+  }
+
+  // 모든 카테고리 조회
+  public List<RecipeCategory> getAllCategories() {
+    return recipeCategoryRepository.findAll();
+  }
+
+  // 특정 Recipe 삭제
+  public void deleteRecipeById(Long recipeId) {
+    if (!recipeRepository.existsById(recipeId)) {
+      throw new IllegalArgumentException("Recipe not found with id: " + recipeId);
+    }
+    recipeRepository.deleteById(recipeId);
+  }
+
+}
