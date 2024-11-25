@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header>
+
+<main class="container">
+    <h2>레시피 재료 관리</h2>
+    <a th:href="@{|/recipes/${recipeId}/ingredients/items|}" class="btn btn-primary" style="float: right; margin-bottom: 10px;">요소 추가</a>
+
+    <!-- 재료 목록 -->
+    <table>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>재료</th>
+            <th>수량</th>
+            <th>단위</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ingredient, iterStat : ${ingredients}">
+            <td th:text="${iterStat.index + 1}"></td>
+            <td th:text="${ingredient.item.getItemId()}"></td>
+            <td th:text="${ingredient.amount}"></td>
+            <td th:text="${ingredient.unit.getUnitName()}"></td>
+            <td>
+                <form th:action="@{|/recipes/${recipeId}/ingredients/${ingredient.id}/delete|}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

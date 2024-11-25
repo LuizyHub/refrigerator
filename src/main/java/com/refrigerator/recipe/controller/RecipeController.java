@@ -8,6 +8,8 @@ import com.refrigerator.recipe.entity.Recipe;
 import com.refrigerator.recipe.repository.RecipeCategoryRepository;
 import com.refrigerator.recipe.repository.RecipeRepository;
 import com.refrigerator.recipe.service.RecipeService;
+import com.refrigerator.recipeingredient.dto.RecipeIngredientDto;
+import com.refrigerator.recipeingredient.service.RecipeIngredientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -28,8 +30,7 @@ import java.util.stream.Collectors;
 public class RecipeController {
 
     private final RecipeService recipeService;
-    private final RecipeRepository recipeRepository;
-    private final RecipeCategoryRepository recipeCategoryRepository;
+    private final RecipeIngredientService recipeIngredientService;
 
     //새로운 레시피 생성 폼
     @GetMapping("/new")
@@ -62,22 +63,7 @@ public class RecipeController {
     }
 
 
-    //특정 레시피 조회
-    @GetMapping ("/{recipeId}")
-    public String getRecipeById(@PathVariable Long recipeId, Model model) {
-        Recipe recipe = recipeService.getRecipeById(recipeId);
-        model.addAttribute("recipe", recipe);
-        return "recipes/detail";
-    }
-
-//    //모든 레시피 조회(카테고리 X 버전)
-//    @GetMapping
-//    public String getAllRecipes(Model model) {
-//        List <Recipe> recipes = recipeService.getAllRecipes();
-//        model.addAttribute("recipes", recipes);
-//        return "recipes";
-//    }
-
+    //레시피 전체 조회 (카테고리별 조회)
     @GetMapping
     public String listRecipes(
             @CurrentMember Member member,
@@ -102,10 +88,16 @@ public class RecipeController {
         model.addAttribute("recipes", recipes);
         model.addAttribute("categories", recipeService.getAllCategories());
 
-        // 디버깅을 위한 로그 추가
-        System.out.println("Recipes: " + recipes);
-        System.out.println("Categories: " + model.getAttribute("categories"));
         return "recipes";
+    }
+
+    // 특정 레시피의 재료들 조회
+    @GetMapping("/{recipeId}")
+    public String getIngredients(@PathVariable Long recipeId, Model model) {
+        List<RecipeIngredientDto> ingredients = recipeIngredientService.getIngredientsByRecipeId(recipeId);
+        model.addAttribute("ingredients", ingredients);
+        model.addAttribute("recipeId", recipeId);
+        return "recipes/detail";
     }
 
     // 특정 레시피 삭제 처리
@@ -114,27 +106,5 @@ public class RecipeController {
         recipeService.deleteRecipeById(recipeId);
         return "redirect:/recipes"; // 삭제 후 레시피 목록으로 리다이렉트
     }
-
-//    @GetMapping ("/{recipeId}/edit")
-//    public String editForm(@PathVariable Long recipeId, Model model) {
-//        Recipe recipe = recipeService.getRecipeById(recipeId);
-//        model.addAttribute("recipe", recipe);
-//        return "recipes/editForm";
-//    }
-//
-//
-//    @PostMapping("/{recipeId}/edit")
-//    public String edit(
-//            @PathVariable Long recipeId,
-//            @Valid @ModelAttribute("recipe") RecipeCreateDto recipeCreateDto,
-//            BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "recipes/editForm";
-//        }
-//        //recipeParam 객체 생성
-//        //recipeRepository.update(recipeId, recipeParam);
-//        return "redirect:/recipeId";
-//    }
-
 
 }
