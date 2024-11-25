@@ -48,7 +48,7 @@ public class ItemController {
         }
 
         itemService.createItem(itemCreateDto);
-        return "redirect:/items";  // 아이템 목록 페이지로 리다이렉트
+        return "redirect:/refrigerators";  // 성공 시 '/refrigerators'로 리디렉션
     }
 
     // 특정 Item 상세 페이지
