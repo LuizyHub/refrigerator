@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}">
+    <title>History</title>
+</head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <!-- 냉장고 이름 표시 -->
+    <h2 th:text="'{' + ${refrigName} + '} 변경 이력'">냉장고 이름 변경 이력</h2>
+
+    <!-- 뒤로가기 버튼 -->
+    <a th:href="@{'/refrigerators'}" class="button">뒤로가기</a>
+
+    <!-- 이력 목록이 없을 때 메시지 -->
+    <div th:if="${history.empty}">
+        <p>No history found.</p>
+    </div>
+
+    <!-- 이력 목록 테이블 -->
+    <table th:if="${!history.empty}">
+        <thead>
+        <tr>
+            <th>누가</th>
+            <th>재고</th>
+            <th>용량</th>
+            <th>단위</th>
+            <th>동작</th>
+            <th>시간</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 각 이력을 반복 출력 -->
+        <tr th:each="log : ${history}">
+            <td th:text="${log.memberId()}">Sample Member</td>
+            <td th:text="${log.inventoryId()}">Sample Inventory</td>
+            <td th:text="${log.amount()}">0</td>
+            <td th:text="${log.unitId()}">ml</td>
+            <td th:text="'추가 또는 소비'">소비</td>
+            <td th:text="${#dates.format(log.timestamp(), 'yyyy-MM-dd HH:mm')}">2024-10-02 22:21</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package com.refrigerator.inventory.service;
 
 import com.refrigerator.common.exception.UnauthorizedException;
+import com.refrigerator.history.dto.History;
+import com.refrigerator.history.service.HistoryService;
 import com.refrigerator.inventory.entity.Inventory;
 import com.refrigerator.inventory.repository.InventoryRepository;
 import com.refrigerator.inventory.dto.InventoryCreateDto;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class InventoryService {
 
   private final MemberRefrigService memberRefrigService;
   private final InventoryRepository inventoryRepository;
+  private final HistoryService historyService;
 
   /**
    * 재고 목록 전체 조회
@@ -67,7 +69,12 @@ public class InventoryService {
         createDto.getEndAt() != null ? LocalDateTime.parse(createDto.getEndAt()) : null
     );
 
-    inventoryRepository.save(inventory);
+    Inventory save = inventoryRepository.save(inventory);
+    if (save == null) {
+      throw new RuntimeException("식재료 추가에 실패했습니다.");
+    }
+
+    historyService.addLog(new History(userId, save.getId(), save.getId(), save.getUnit().getUnitId(), save.getAmount()));
   }
 
   private String getItemName(Long itemId) {

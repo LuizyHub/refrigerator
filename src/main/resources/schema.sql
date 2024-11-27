@@ -144,7 +144,7 @@ CREATE INDEX IF NOT EXISTS idx_recipe_id ON recipe_ingredient (recipe_id);
 
 -- log 테이블
 CREATE TABLE IF NOT EXISTS log (
-                                   log_id INT PRIMARY KEY AUTO_INCREMENT,
+                                   log_id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                    user_id BIGINT,
                                    inventory_id INT,
                                    unit_id INT NOT NULL,

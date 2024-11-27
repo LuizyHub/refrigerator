@@ -15,20 +15,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/refrigerators")
+@RequestMapping("/refrigerators/{refrigId}/inventories")
 @RequiredArgsConstructor
 public class InventoryController {
 
   private final InventoryService inventoryService;
 
   // 냉장고의 모든 식재료 조회
-  @GetMapping("/{refrigId}/inventories")
+  @GetMapping
   public String getAllInventories(
       @CurrentMember Member member,
       @PathVariable Long refrigId,
       Model model
   ) {
     List<InventoryResponseDto> inventories = inventoryService.getAllInventories(member.getUserId(), refrigId);
+    model.addAttribute("refrigId", refrigId);
     model.addAttribute("inventories", inventories);
     return "inventories"; // inventories.html 뷰로 이동
   }

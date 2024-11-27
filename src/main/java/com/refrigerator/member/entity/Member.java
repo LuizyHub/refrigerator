@@ -22,9 +22,6 @@ public class Member {
     @Column(nullable = false, length = 100)
     private String name;
 
-//    @OneToMany(mappedBy = "user")
-//    private Set<UserRefrig> userRefrigs = new HashSet<>();
-
     private Member(String email, String name) {
         this.email = email;
         this.name = name;

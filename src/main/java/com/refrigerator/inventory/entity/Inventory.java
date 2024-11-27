@@ -24,11 +24,6 @@ public class Inventory {
   @Column(name = "INVENTORY_ID")
   private Integer id;
 
-//  @NotNull
-//  @ManyToOne
-//  @JoinColumn(name = "REFRIG_ID", nullable = false)
-//  private Refrigerator refrig;
-
   @Column(name = "REFRIG_ID")
   private Long refrigId;
 

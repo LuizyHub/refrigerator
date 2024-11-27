@@ -7,7 +7,6 @@ import com.refrigerator.refrig.entity.Refrigerator;
 import com.refrigerator.refrig.service.RefrigeratorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

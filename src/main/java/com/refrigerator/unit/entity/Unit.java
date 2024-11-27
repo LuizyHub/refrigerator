@@ -22,11 +22,6 @@ public class Unit {
     @Column(nullable = false)
     private Integer stateId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "state_id", nullable = false)
-//    private State state;
-
-
     public Unit(String name, Integer stateId) {
         this.name = name;
         this.stateId = stateId;
