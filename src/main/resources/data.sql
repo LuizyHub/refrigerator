@@ -47,9 +47,9 @@ INSERT INTO state (name)
 SELECT 'GAS'
     WHERE NOT EXISTS (SELECT 1 FROM state WHERE name = 'GAS');
 
-INSERT INTO item_category (name)
+INSERT INTO state (name)
 SELECT 'POWDER'
-    WHERE NOT EXISTS (SELECT 1 FROM item_category WHERE name = 'POWDER');
+    WHERE NOT EXISTS (SELECT 1 FROM state WHERE name = 'POWDER');
 
 
 -- UNIT
@@ -73,6 +73,10 @@ INSERT INTO item_category (name)
 SELECT '유제품'
     WHERE NOT EXISTS (SELECT 1 FROM item_category WHERE name = '유제품');
 
+INSERT INTO item_category (name)
+SELECT '육류'
+    WHERE NOT EXISTS (SELECT 1 FROM item_category WHERE name = '육류');
+
 
 -- ITEM
 
@@ -82,3 +86,10 @@ SELECT 'milk', category_id, state_id
     WHERE item_category.name = '유제품'
     AND state.name = 'LIQUID'
     AND NOT EXISTS (SELECT 1 FROM item WHERE name = 'milk');
+
+INSERT INTO item (name, category_id, state_id)
+SELECT '삼겹살', category_id, state_id
+    FROM item_category, state
+    WHERE item_category.name = '육류'
+    AND state.name = 'SOLID'
+    AND NOT EXISTS (SELECT 1 FROM item WHERE name = '삼겹살');

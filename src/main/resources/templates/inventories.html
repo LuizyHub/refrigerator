@@ -6,6 +6,9 @@
 
 <main class="container">
 
+
+    <button th:onclick="'location.href=\'/refrigerators/' + ${refrigId} + '/share\''">공유</button>
+    <button th:onclick="'location.href=\'/refrigerators/' + ${refrigId} + '/inventories/items\''">재료 추가</button>
     <!-- 재고 목록 테이블 -->
     <table th:if="${inventories}">
         <thead>

@@ -9,11 +9,11 @@
   - 냉장고 리스트 조회
 - [x] /refrigerators/new
   - 냉장고 추가
-- [ ] /refrigerators/{냉장고id}/inventories
+- [x] /refrigerators/{냉장고id}/inventories
   - 냉장고 재고 조회
-- [ ] /refrigerators/{냉장고id}/inventories/items?category={카테고리id}
+- [x] /refrigerators/{냉장고id}/inventories/items?category={카테고리id}
   - 냉장고 재고 추가 (아이템 선택)
-- [ ] /refrigerators/{냉장고id}/inventories/items/{아이템id}
+- [ ] /refrigerators/{냉장고id}/inventories/new?itemId={itemId}
   - 냉장고 재고 추가 (단위, 용량, 유통기한)
 - [ ] /refrigerators/{냉장고id}/inventories/{재고id}
   - 냉장고 재고 수정, 소비 페이지

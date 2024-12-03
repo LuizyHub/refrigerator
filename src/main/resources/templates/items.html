@@ -4,3 +4,44 @@
 <body>
 <header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
 
+<main class="container">
+    <section>
+        <h2>카테고리 선택</h2>
+        <form th:action="@{${currentUri}}" method="get">
+            <div>
+                <ul>
+                    <li th:each="category : ${categories}">
+                        <label>
+                            <input type="checkbox"
+                                   name="categoryIds"
+                                   th:value="${category.categoryId}"
+                                   th:checked="${categoryIds != null and categoryIds.contains(category.categoryId)}" />
+                            <span th:text="${category.name}">카테고리 이름</span>
+                        </label>
+                    </li>
+                </ul>
+                <button type="submit">적용</button>
+            </div>
+        </form>
+    </section>
+
+    <section>
+        <h2>아이템 선택</h2>
+        <form th:action="@{'/refrigerators/' + ${refrigId} + '/inventories/new'}" method="get">
+            <select name="itemId">
+                <option th:each="item : ${items}" th:value="${item.itemId}" th:text="${item.name}">
+                    아이템 이름
+                </option>
+            </select>
+            <div>
+                <!-- 이전 버튼 -->
+                <button type="button" th:onclick="'location.href=\'' + @{'/refrigerators/' + ${refrigId} + '/inventories'} + '\''">이전</button>
+
+                <!-- 다음 버튼 -->
+                <button type="submit">다음</button>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

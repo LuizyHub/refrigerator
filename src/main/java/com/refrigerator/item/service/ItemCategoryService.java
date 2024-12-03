@@ -5,6 +5,7 @@ import com.refrigerator.item.repository.ItemCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +30,9 @@ public class ItemCategoryService {
     // name을 기준으로 ItemCategory 조회
     public Optional<ItemCategory> getItemCategoryByName(String name) {
         return itemCategoryRepository.findByName(name);
+    }
+
+    public List<ItemCategory> getAllCategories() {
+        return itemCategoryRepository.findAll();
     }
 }
