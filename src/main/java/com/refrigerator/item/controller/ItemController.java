@@ -3,8 +3,12 @@ package com.refrigerator.item.controller;
 import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.item.dto.ItemCreateDto;
 import com.refrigerator.item.entity.Item;
+import com.refrigerator.item.entity.ItemCategory;
+import com.refrigerator.item.service.ItemCategoryService;
 import com.refrigerator.item.service.ItemService;
 import com.refrigerator.member.entity.Member;
+import com.refrigerator.state.entity.State;
+import com.refrigerator.state.service.StateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +24,8 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-
+    private final ItemCategoryService itemCategoryService;
+    private final StateService stateService;
     // 모든 Item 리스트 페이지
     @GetMapping
     public String getItems(Model model) {
@@ -33,7 +38,13 @@ public class ItemController {
     @GetMapping("/new")
     public String createItemForm(
             @CurrentMember Member member, // 로그인이 필요한 부분은 이 부분 추가
-            @ModelAttribute("item") ItemCreateDto itemCreateDto) {
+            @ModelAttribute("item") ItemCreateDto itemCreateDto,
+            Model model
+    ) {
+        List<ItemCategory> categories = itemCategoryService.getAllCategories();
+        List<State> states = stateService.getAllStates();
+        model.addAttribute("categories", categories);
+        model.addAttribute("states", states);
         return "items/new";  // items/new.html 뷰로 이동
     }
 
@@ -41,9 +52,14 @@ public class ItemController {
     @PostMapping("/new")
     public String createItem(
             @Valid @ModelAttribute("item") ItemCreateDto itemCreateDto,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            Model model
     ) {
         if (bindingResult.hasErrors()) {
+            List<ItemCategory> categories = itemCategoryService.getAllCategories();
+            List<State> states = stateService.getAllStates();
+            model.addAttribute("categories", categories);
+            model.addAttribute("states", states);
             return "items/new";  // 유효성 검사 실패 시 다시 폼으로 이동
         }
 

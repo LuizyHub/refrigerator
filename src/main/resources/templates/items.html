@@ -5,6 +5,8 @@
 <header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
 
 <main class="container">
+    <button onclick="location.href='/items/new'">새로운 Item 추가</button>
+
     <section>
         <h2>카테고리 선택</h2>
         <form th:action="@{${currentUri}}" method="get">

@@ -23,12 +23,14 @@ public class ItemService {
     private final EntityManager entityManager;
 
     public void createItem(ItemCreateDto itemCreateDto) {
-        ItemCategory category = itemCategoryRepository.findById(itemCreateDto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-        State state = stateRepository.findById(itemCreateDto.getStateId())
-                .orElseThrow(() -> new IllegalArgumentException("State not found"));
+        ItemCategory itemCategory = entityManager.getReference(ItemCategory.class, itemCreateDto.getCategoryId());
+        State state = entityManager.getReference(State.class, itemCreateDto.getStateId());
 
-        Item item = itemCreateDto.toItem(category, state);
+        Item item = new Item(
+                itemCreateDto.getName(),
+                itemCategory,
+                state
+        );
         itemRepository.save(item);
     }
 

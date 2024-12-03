@@ -5,32 +5,42 @@
 <header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
 
 <main class="container">
-    <h2>아이템 추가</h2>
+    <h2>아이템 추가하기</h2>
 
-    <!-- 생성 폼 -->
-    <form th:action="@{/items/new}" th:object="${item}" method="post">
-        <div th:if="${error}" th:text="${error}"></div>
-
+    <form th:action="@{'/items/new'}" method="post" th:object="${item}">
+        <!-- 이름 -->
         <div>
-            <label for="name">Item Name:</label>
-            <input type="text" th:field="*{name}" id="name" />
-            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            <label for="name">이름</label>
+            <input id="name" type="text" name="name" th:field="*{name}" placeholder="아이템 이름" required />
         </div>
 
-        <!-- 아이템 상태 선택 -->
+        <!-- 상태 -->
         <div>
-            <label for="state">Item State:</label>
-            <select th:field="*{state}" id="state">
-                <option value="solid">고체</option>
-                <option value="liquid">액체</option>
+            <label for="stateId">상태</label>
+            <select id="stateId" name="stateId" th:field="*{stateId}" required>
+                <option th:each="state : ${states}" th:value="${state.stateId}" th:text="${state.name}">
+                    상태 선택
+                </option>
             </select>
-            <div th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></div>
         </div>
 
-        <!-- 폼 제출 버튼 -->
-        <button type="submit">추가</button> <!-- 서버에서 처리 후 '/refrigerators'로 리디렉션 -->
-        <!-- 취소 버튼 -->
-        <button type="button" onclick="window.location.href='/refrigerators'">취소</button>
+        <!-- 카테고리 선택 -->
+        <div>
+            <h3>카테고리 선택</h3>
+            <ul>
+                <li th:each="category : ${categories}">
+                    <label>
+                        <input type="radio" name="categoryId" th:value="${category.categoryId}" th:field="*{categoryId}" required />
+                        <span th:text="${category.name}">카테고리 이름</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 버튼 -->
+        <div>
+            <button type="submit">추가</button>
+        </div>
     </form>
 </main>
 </body>

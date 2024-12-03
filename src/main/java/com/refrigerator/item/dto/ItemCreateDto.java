@@ -15,9 +15,7 @@ public class ItemCreateDto {
     @NotBlank(message = "아이템 이름은 필수 입력값입니다.")
     private String name;
 
-    @NotBlank(message = "아이템 상태는 필수 입력값입니다.")
-    private String state;
-    
+    @NotNull
     private Long categoryId;
 
     @NotNull
