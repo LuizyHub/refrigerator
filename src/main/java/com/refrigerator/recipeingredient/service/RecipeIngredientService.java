@@ -26,7 +26,7 @@ public class RecipeIngredientService {
     private final RecipeRepository recipeRepository;
     private final ItemRepository itemRepository;
     private final UnitRepository unitRepository;
-
+/*
     public List<RecipeIngredientDto> getIngredientsByRecipeId(Long recipeId) {
         return recipeIngredientRepository.findByRecipe_RecipeId(recipeId).stream().map(ingredient -> {
             RecipeIngredientDto dto = new RecipeIngredientDto();
@@ -37,6 +37,10 @@ public class RecipeIngredientService {
             dto.setAmount(ingredient.getAmount());
             return dto;
         }).collect(Collectors.toList());
+    }
+    */
+    public List<RecipeIngredient> getIngredientsByRecipeId(Long recipeId) {
+        return recipeIngredientRepository.findByRecipe_RecipeId(recipeId);
     }
 
     public void addIngredient(RecipeIngredientDto dto) {

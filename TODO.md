@@ -23,11 +23,11 @@
   - 레시피 조회
 - [x] recipes/new
   - 레시피 추가
-- [ ] recipes/{레시피id}
+- [x] recipes/{레시피id}
   - 레시피 상세 조회
-- [ ] recipes/{레시피id}/ingredients/items?category={카테고리id}
+- [x] /recipes/{레시피id}/ingredients/items?category={카테고리id}
   - 레시피 재료 추가 (아이템 선택)
-- [ ] recipes/{레시피id}/ingredients/items/{아이템id}
+- [x] /recipes/{레시피id}/ingredients/items/new?itemId={아이템id}
   - 레시피 재료 추가 (단위, 용량)
 - [ ] recipes/{레시피id}/refrigerators
   - 레시피를 제작할 수 있는 냉장고 조회

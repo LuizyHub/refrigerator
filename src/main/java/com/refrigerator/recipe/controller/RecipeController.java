@@ -2,14 +2,20 @@ package com.refrigerator.recipe.controller;
 
 import com.refrigerator.common.resolver.CurrentMember;
 //import com.refrigerator.item.entity.Item;
+import com.refrigerator.item.entity.Item;
+import com.refrigerator.item.entity.ItemCategory;
+import com.refrigerator.item.service.ItemCategoryService;
+import com.refrigerator.item.service.ItemService;
 import com.refrigerator.member.entity.Member;
 import com.refrigerator.recipe.dto.RecipeCreateDto;
 import com.refrigerator.recipe.dto.RecipeDto;
 import com.refrigerator.recipe.entity.Recipe;
+import com.refrigerator.recipe.entity.RecipeCategory;
 import com.refrigerator.recipe.repository.RecipeCategoryRepository;
 import com.refrigerator.recipe.repository.RecipeRepository;
 import com.refrigerator.recipe.service.RecipeService;
 import com.refrigerator.recipeingredient.dto.RecipeIngredientDto;
+import com.refrigerator.recipeingredient.entity.RecipeIngredient;
 import com.refrigerator.recipeingredient.service.RecipeIngredientService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -33,6 +39,7 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final RecipeIngredientService recipeIngredientService;
+
 
     //새로운 레시피 생성 폼
     @GetMapping("/new")
@@ -90,7 +97,7 @@ public class RecipeController {
     // 특정 레시피의 재료들 조회
     @GetMapping("/{recipeId}")
     public String getIngredients(@PathVariable Long recipeId, Model model) {
-        List<RecipeIngredientDto> ingredients = recipeIngredientService.getIngredientsByRecipeId(recipeId);
+        List<RecipeIngredient> ingredients = recipeIngredientService.getIngredientsByRecipeId(recipeId);
         model.addAttribute("ingredients", ingredients);
         model.addAttribute("recipeId", recipeId);
         return "recipes/detail";

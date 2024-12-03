@@ -22,9 +22,9 @@
         <tbody>
         <tr th:each="ingredient, iterStat : ${ingredients}">
             <td th:text="${iterStat.index + 1}"></td>
-            <td th:text="${ingredient.item.getItemId()}"></td>
+            <td th:text="${ingredient.item.name}"></td>
             <td th:text="${ingredient.amount}"></td>
-            <td th:text="${ingredient.unit.getUnitName()}"></td>
+            <td th:text="${ingredient.unit.name}"></td>
             <td>
                 <form th:action="@{|/recipes/${recipeId}/ingredients/${ingredient.id}/delete|}" method="post" style="display:inline;">
                     <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
