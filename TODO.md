@@ -1,13 +1,13 @@
 
 
 ### TODO
-- [ ] /login
+- [x] /login
   - 로그인
-- [ ] /register
+- [x] /register
   - 로그아웃
-- [ ] /refrigerators
+- [x] /refrigerators
   - 냉장고 리스트 조회
-- [ ] /refrigerators/new
+- [x] /refrigerators/new
   - 냉장고 추가
 - [ ] /refrigerators/{냉장고id}/inventories
   - 냉장고 재고 조회
