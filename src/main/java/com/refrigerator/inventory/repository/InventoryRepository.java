@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository // 이 애너테이션은 필수는 아니지만 명시적으로 선언해도 무방
-public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
 
   List<Inventory> findByRefrigId(Long refrigId); // refrigId로 데이터를 검색하는 메서드
 

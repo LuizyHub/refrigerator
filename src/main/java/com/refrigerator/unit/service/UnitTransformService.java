@@ -6,20 +6,19 @@ import com.refrigerator.unit.entity.UnitTransform;
 import com.refrigerator.unit.entity.UnitTransformId;
 import com.refrigerator.unit.repository.UnitRepository;
 import com.refrigerator.unit.repository.UnitTransformRepository;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UnitTransformService {
 
     private final UnitTransformRepository unitTransformRepository;
     private final UnitService unitServie;
-
-    public UnitTransformService(UnitTransformRepository unitTransformRepository, UnitService unitService) {
-        this.unitTransformRepository = unitTransformRepository;
-        this.unitServie = unitService;
-    }
+    private final EntityManager entityManager;
 
     // 모든 UnitTransform 조회
     public List<UnitTransform> getAllUnitTransforms() {
@@ -45,5 +44,17 @@ public class UnitTransformService {
     // 유닛 변환 삭제
     public void deleteUnitTransform(Integer fromUnitId, Integer toUnitId) {
         unitTransformRepository.deleteById(new UnitTransformId(fromUnitId, toUnitId));
+    }
+
+    public double transformUnit(Integer fromUnitId, Integer toUnitId, double value) {
+        if (fromUnitId.equals(toUnitId)) {
+            return value;
+        }
+        Unit fromUnit = entityManager.getReference(Unit.class, fromUnitId);
+        Unit toUnit = entityManager.getReference(Unit.class, toUnitId);
+        UnitTransform unitTransform = unitTransformRepository.findByFromUnitAndToUnit(fromUnit, toUnit)
+                .orElseThrow(() -> new IllegalArgumentException("Unit transform not found"));
+
+        return value * unitTransform.getRatio();
     }
 }

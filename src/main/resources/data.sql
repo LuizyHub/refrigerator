@@ -66,6 +66,31 @@ SELECT 'l', state_id
     WHERE name = 'LIQUID'
     AND NOT EXISTS (SELECT 1 FROM unit WHERE name = 'l');
 
+-- UNIT TRANSFER
+-- ml -> l 변환 (1 ml = 0.001 l)
+INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
+SELECT u1.unit_id, u2.unit_id, 0.001
+FROM unit u1
+         JOIN unit u2 ON u1.state_id = u2.state_id
+WHERE u1.name = 'ml' AND u2.name = 'l'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM unit_transform
+    WHERE from_unit_id = u1.unit_id AND to_unit_id = u2.unit_id
+);
+
+-- l -> ml 변환 (1 l = 1000 ml)
+INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
+SELECT u1.unit_id, u2.unit_id, 1000
+FROM unit u1
+         JOIN unit u2 ON u1.state_id = u2.state_id
+WHERE u1.name = 'l' AND u2.name = 'ml'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM unit_transform
+    WHERE from_unit_id = u1.unit_id AND to_unit_id = u2.unit_id
+);
+
 
 -- CATEGORY
 

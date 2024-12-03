@@ -10,6 +10,7 @@ import com.refrigerator.inventory.dto.InventoryResponseDto;
 import com.refrigerator.item.entity.Item;
 import com.refrigerator.permission.service.MemberRefrigService;
 import com.refrigerator.unit.entity.Unit;
+import com.refrigerator.unit.service.UnitTransformService;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class InventoryService {
     private final InventoryRepository inventoryRepository;
     private final HistoryService historyService;
     private final EntityManager entityManager;
+    private final UnitTransformService unitTransformService;
 
     /**
      * 재고 목록 전체 조회
@@ -81,6 +83,28 @@ public class InventoryService {
         }
 
         historyService.addLog(new History(userId, userId, save.getId(), save.getUnit().getUnitId(), save.getAmount()));
+    }
+
+    public Inventory getInventoryById(Long userId, Integer inventoryId) {
+        Inventory inventory = inventoryRepository.findById(inventoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Inventory not found"));
+
+        if (!memberRefrigService.hasPermissionToRead(userId, inventory.getRefrigId())) {
+            throw new UnauthorizedException("해당 냉장고에 대한 읽기 권한이 없습니다.");
+        }
+
+        return inventory;
+    }
+
+    public void consumeInventory(Long userId, Integer inventoryId, Double amount, Integer unitId) {
+        if (!memberRefrigService.hasPermissionToWrite(userId, getInventoryById(userId, inventoryId).getRefrigId())) {
+            throw new UnauthorizedException("해당 냉장고에 대한 쓰기 권한이 없습니다.");
+        }
+        Inventory inventory = getInventoryById(userId, inventoryId);
+        double consumedAmount = unitTransformService.transformUnit(inventory.getUnit().getUnitId(), unitId, amount);
+        inventory.consume(consumedAmount);
+
+        inventoryRepository.save(inventory);
     }
 
     private String getItemName(Long itemId) {

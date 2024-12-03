@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <h2>재고 상세 정보</h2>
+
+    <!-- 수정 폼 -->
+    <form th:action="@{'/refrigerators/' + ${refrigId} + '/inventories/' + ${inventory.id} + '/update'}"
+          th:object="${inventory}" method="post">
+        <div>
+            <!-- Item -->
+            <label for="itemName">Item</label>
+            <input id="itemName" type="text" th:value="${inventory.item.name}" readonly />
+        </div>
+
+        <div>
+            <!-- Unit -->
+            <label for="unitName">단위</label>
+            <input id="unitName" type="text" th:value="${inventory.unit.name}" readonly />
+        </div>
+
+        <div>
+            <!-- Amount -->
+            <label for="amount">용량</label>
+            <input id="amount" type="number" name="amount" th:field="*{amount}" required readonly/>
+        </div>
+
+        <div>
+            <!-- Expiration -->
+            <label for="endAt">유통기한</label>
+            <input id="endAt" type="datetime-local" name="endAt" th:field="*{endAt}" readonly/>
+        </div>
+
+<!--        <div>-->
+<!--            &lt;!&ndash; Submit Button &ndash;&gt;-->
+<!--            <button type="submit">수정</button>-->
+<!--        </div>-->
+    </form>
+
+    <hr>
+
+    <!-- 소비하기 폼 -->
+    <h3>소비하기</h3>
+    <form th:action="@{'/refrigerators/' + ${refrigId} + '/inventories/' + ${inventoryId} + '/consume'}" method="post">
+        <div>
+            <!-- Consume Amount -->
+            <label for="consumeAmount">용량</label>
+            <input id="consumeAmount" type="number" name="amount" placeholder="소비할 용량" step="any" required />
+        </div>
+
+        <div>
+            <!-- Unit Selection -->
+            <label for="consumeUnitId">단위</label>
+            <select id="consumeUnitId" name="unitId" required>
+                <option th:each="unit : ${units}" th:value="${unit.unitId}" th:text="${unit.name}">
+                    단위 선택
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <!-- Consume Button -->
+            <button type="submit">소비</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -2,7 +2,9 @@ package com.refrigerator.inventory.controller;
 
 import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.inventory.dto.InventoryCreateDto;
+import com.refrigerator.inventory.dto.InventoryDto;
 import com.refrigerator.inventory.dto.InventoryResponseDto;
+import com.refrigerator.inventory.entity.Inventory;
 import com.refrigerator.inventory.service.InventoryService;
 import com.refrigerator.item.entity.Item;
 import com.refrigerator.item.entity.ItemCategory;
@@ -42,6 +44,39 @@ public class InventoryController {
         model.addAttribute("refrigId", refrigId);
         model.addAttribute("inventories", inventories);
         return "inventories"; // inventories.html 뷰로 이동
+    }
+
+    @GetMapping("/{inventoryId}")
+    public String editInventoryForm(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @PathVariable Integer inventoryId,
+            Model model
+    ) {
+        Inventory inventory = inventoryService.getInventoryById(member.getUserId(), inventoryId);
+//        InventoryDto inventoryDto = InventoryDto.fromEntity(inventory);
+        Item item = inventory.getItem();
+        List<Unit> units = unitService.getUnitsByState(item.getState());
+
+        model.addAttribute("refrigId", refrigId);
+        model.addAttribute("inventoryId", inventoryId);
+        model.addAttribute("item", item);
+        model.addAttribute("units", units);
+        model.addAttribute("inventory", inventory);
+
+        return "inventories/detail"; // inventories/detail.html 뷰로 이동
+    }
+
+    @PostMapping("/{inventoryId}/consume")
+    public String consumeInventory(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @PathVariable Integer inventoryId,
+            @RequestParam(value = "amount", required = true) Double amount,
+            @RequestParam(value = "unitId", required = true) Integer unitId
+    ) {
+        inventoryService.consumeInventory(member.getUserId(), inventoryId, amount, unitId);
+        return "redirect:/refrigerators/" + refrigId + "/inventories";
     }
 
     @GetMapping("/items")

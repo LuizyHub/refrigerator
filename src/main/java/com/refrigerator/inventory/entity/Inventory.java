@@ -61,4 +61,12 @@ public class Inventory {
     protected Inventory() {
 
     }
+
+    public double consume(double amount) {
+        if (this.amount < amount) {
+            throw new IllegalArgumentException("재고가 부족합니다.");
+        }
+        this.amount -= amount;
+        return this.amount;
+    }
 }

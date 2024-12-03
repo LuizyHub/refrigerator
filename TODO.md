@@ -15,7 +15,7 @@
   - 냉장고 재고 추가 (아이템 선택)
 - [x] /refrigerators/{냉장고id}/inventories/new?itemId={itemId}
   - 냉장고 재고 추가 (단위, 용량, 유통기한)
-- [ ] /refrigerators/{냉장고id}/inventories/{재고id}
+- [x] /refrigerators/{냉장고id}/inventories/{재고id}
   - 냉장고 재고 수정, 소비 페이지
 - [ ] /items/new
   - 아이템 추가
