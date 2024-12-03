@@ -28,8 +28,19 @@
               th:value="${item.id}"
               th:text="${item.name}"></option>
     </select>
-    <button type="submit" onclick="window.location.href='/recipeIngredient/new'">다음</button>
+    <button type="submit">다음</button>
   </form>
 </main>
+
+<!-- 이전 및 다음 버튼 -->
+<footer style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px;">
+  <button type="button" onclick="window.location.href='/recipes'" class="btn" style="margin-right: auto;">
+    이전
+  </button>
+  <button type="button" onclick="window.location.href='/recipes/${recipeId}/ingredients/items/${itemId}'" class="btn" style="margin-left: auto;">
+    다음
+  </button>
+</footer>
+
 </body>
 </html>
