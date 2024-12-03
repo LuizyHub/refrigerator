@@ -19,9 +19,9 @@
   - 냉장고 재고 수정, 소비 페이지
 - [x] /items/new
   - 아이템 추가
-- [ ] recipes?category={카테고리id}
+- [x] /recipes?category={카테고리id}
   - 레시피 조회
-- [ ] recipes/new
+- [x] recipes/new
   - 레시피 추가
 - [ ] recipes/{레시피id}
   - 레시피 상세 조회

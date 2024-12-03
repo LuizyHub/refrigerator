@@ -33,7 +33,7 @@ public class RecipeService {
       throw new EntityNotFoundException("Member is null");
     }
 
-    Set<RecipeCategory> categories = Optional.ofNullable(recipeCreateDto.getCategoryNames())
+    Set<RecipeCategory> categories = Optional.ofNullable(recipeCreateDto.getCategories())
             .orElse(Set.of()) // categoryNames가 null이면 빈 Set 반환
             .stream() // Set<String>을 Stream<String>으로 변환
             .map(name -> recipeCategoryRepository.findByName(name.trim()) // 이름으로 카테고리 조회
@@ -55,7 +55,7 @@ public class RecipeService {
 
   public List<Recipe> getRecipesByCategoryIdsAndUserId(List<Long> categoryIds, Long userId) {
     List<RecipeCategory> categories = recipeCategoryRepository.findAllByCategoryIdIn(categoryIds);
-    return recipeRepository.findAllByCategoriesInAndUserId(categories, userId);
+    return recipeRepository.findAllByExactCategoriesAndUserId(categories, categories.size(), userId);
   }
 
   public List<Recipe> getAllRecipesByUserId(Long userId) {

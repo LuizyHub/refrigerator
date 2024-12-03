@@ -4,12 +4,14 @@ import com.refrigerator.common.resolver.CurrentMember;
 //import com.refrigerator.item.entity.Item;
 import com.refrigerator.member.entity.Member;
 import com.refrigerator.recipe.dto.RecipeCreateDto;
+import com.refrigerator.recipe.dto.RecipeDto;
 import com.refrigerator.recipe.entity.Recipe;
 import com.refrigerator.recipe.repository.RecipeCategoryRepository;
 import com.refrigerator.recipe.repository.RecipeRepository;
 import com.refrigerator.recipe.service.RecipeService;
 import com.refrigerator.recipeingredient.dto.RecipeIngredientDto;
 import com.refrigerator.recipeingredient.service.RecipeIngredientService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
 
 // form => update, delete
 @Controller
-@RequestMapping("recipes")
+@RequestMapping("/recipes")
 @RequiredArgsConstructor
 public class RecipeController {
 
@@ -49,15 +51,6 @@ public class RecipeController {
             return "recipes/new";
         }
 
-        // 카테고리 이름 분리 처리
-        Set<String> parsedCategoryNames = Optional.ofNullable(recipeCreateDto.getCategoryNames())
-                .orElse(Set.of())
-                .stream()
-                .flatMap(names -> Arrays.stream(names.split("[,\\s]+"))) // 쉼표 또는 공백으로 분리
-                .filter(name -> !name.isBlank()) // 빈 값 제거
-                .collect(Collectors.toSet());
-
-        recipeCreateDto.setCategoryNames(parsedCategoryNames); // 분리된 카테고리 이름 설정
         recipeService.createRecipe(member, recipeCreateDto);
         return "redirect:/recipes";
     }
@@ -66,6 +59,7 @@ public class RecipeController {
     //레시피 전체 조회 (카테고리별 조회)
     @GetMapping
     public String listRecipes(
+            HttpServletRequest request,
             @CurrentMember Member member,
             @RequestParam(value = "categoryId", required = false) List<Long> categoryId,
             Model model) {
@@ -77,15 +71,17 @@ public class RecipeController {
         // 특정 카테고리의 레시피 조회
         if (categoryId != null && !categoryId.isEmpty()) {
             recipes = recipeService.getRecipesByCategoryIdsAndUserId(categoryId, userId);
-            model.addAttribute("selectedCategoryIds", categoryId);
+            model.addAttribute("categoryIds", categoryId);
         } else {
             // 모든 레시피 조회
             recipes = recipeService.getAllRecipesByUserId(userId);
-            model.addAttribute("selectedCategoryIds", null);
+            model.addAttribute("categoryIds", List.of());
         }
 
         // 카테고리 및 레시피 데이터를 모델에 추가
-        model.addAttribute("recipes", recipes);
+        model.addAttribute("currentUri", request.getRequestURI());
+        List<RecipeDto> list = recipes.stream().map(RecipeDto::fromEntity).toList();
+        model.addAttribute("recipes", list);
         model.addAttribute("categories", recipeService.getAllCategories());
 
         return "recipes";

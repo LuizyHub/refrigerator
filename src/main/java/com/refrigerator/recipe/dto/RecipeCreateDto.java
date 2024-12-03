@@ -8,10 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -23,13 +20,26 @@ public class RecipeCreateDto {
 
     private Long userId;
 
-    private Set<String> categoryNames;
+    private String categoryNames;
+
+    private Set<String> categories = new HashSet<>();
+
+    public void setCategoryNames(String categoryNames) {
+        this.categoryNames = categoryNames;
+        String[] split = Arrays.stream(categoryNames.split(",")).map(String::trim).toArray(String[]::new);
+        this.categories = new HashSet<>(List.of(split));
+    }
+
+    public void setCategories(Set<String> categories) {
+        this.categories = categories;
+        this.categoryNames = String.join(", ", categories);
+    }
 
     // 사용자 ID를 기반으로 Recipe 객체 생성
     public Recipe toRecipe(Long userId, Set<RecipeCategory> existingCategories) {
         Set<RecipeCategory> recipeCategories = new HashSet<>();
 
-        for (String categoryName : categoryNames) {
+        for (String categoryName : categories) {
             // 이미 존재하는 카테고리인지 확인
             RecipeCategory existingCategory = existingCategories.stream()
                     .filter(category -> category.getName().equals(categoryName))
