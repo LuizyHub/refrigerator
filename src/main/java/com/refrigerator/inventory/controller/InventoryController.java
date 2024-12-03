@@ -9,12 +9,14 @@ import com.refrigerator.item.entity.ItemCategory;
 import com.refrigerator.item.service.ItemCategoryService;
 import com.refrigerator.item.service.ItemService;
 import com.refrigerator.member.entity.Member;
+import com.refrigerator.unit.entity.Unit;
+import com.refrigerator.unit.service.UnitService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +29,8 @@ public class InventoryController {
     private final InventoryService inventoryService;
     private final ItemCategoryService itemCategoryService;
     private final ItemService itemService;
+    private final UnitService unitService;
+
     // 냉장고의 모든 식재료 조회
     @GetMapping
     public String getAllInventories(
@@ -65,13 +69,47 @@ public class InventoryController {
         return "items"; // items.html 뷰로 이동
     }
 
-    // 냉장고에 식재료 추가
-    @PostMapping
-    public ResponseEntity<String> addInventory(
+    @GetMapping("/new")
+    public String createInventoryForm(
+            HttpServletRequest request,
             @CurrentMember Member member,
-            @Validated @RequestBody InventoryCreateDto createDto
+            @PathVariable Long refrigId,
+            @ModelAttribute("inventory") InventoryCreateDto createDto,
+            @RequestParam(value = "itemId", required = true) Long itemId,
+            Model model
     ) {
+        Item item = itemService.getItemById(itemId);
+        List<Unit> units = unitService.getUnitsByState(item.getState());
+        createDto.setItemId(itemId);
+
+        model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("refrigId", refrigId);
+        model.addAttribute("item", item);
+        model.addAttribute("units", units);
+
+        return "inventories/new"; // inventories/new.html 뷰로 이동
+    }
+
+    // 냉장고에 식재료 추가
+    @PostMapping("/new")
+    public String addInventory(
+            HttpServletRequest request,
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @Valid @ModelAttribute("inventory") InventoryCreateDto createDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            Item item = itemService.getItemById(createDto.getItemId());
+            List<Unit> units = unitService.getUnitsByState(item.getState());
+            model.addAttribute("currentUri", request.getRequestURI());
+            model.addAttribute("refrigId", refrigId);
+            model.addAttribute("item", item);
+            model.addAttribute("units", units);
+            return "inventories/new";
+        }
         inventoryService.addInventory(member.getUserId(), createDto);
-        return ResponseEntity.ok("Inventory created successfully.");
+        return "redirect:/refrigerators/" + createDto.getRefrigId() + "/inventories";
     }
 }

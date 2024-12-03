@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class InventoryCreateDto {
@@ -20,5 +22,5 @@ public class InventoryCreateDto {
   @NotNull
   private Double amount;  // 수량
 
-  private String endAt;  // 만료일 (optional)
+  private LocalDateTime endAt;  // 만료일 (optional)
 }

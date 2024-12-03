@@ -35,6 +35,7 @@ public class UnitController {
         return "units/new";  // units/new.html 뷰로 이동
     }
 
+/*
     // 새 Unit 생성 처리
     @PostMapping("/new")
     public String createUnit(
@@ -48,6 +49,7 @@ public class UnitController {
         unitService.createUnit(unitCreateDto);
         return "redirect:/units";  // 목록 페이지로 리다이렉트
     }
+*/
 
     // 특정 Unit의 상세 페이지
     @GetMapping("/{unitId}")

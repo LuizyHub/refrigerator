@@ -42,7 +42,7 @@ public class ItemService {
     }
 
     public List<Item> getItemsByCategoryId(List<Long> categoryIds) {
-        List<ItemCategory> list = categoryIds.stream().map(id -> entityManager.find(ItemCategory.class, id)).toList();
+        List<ItemCategory> list = categoryIds.stream().map(id -> entityManager.getReference(ItemCategory.class, id)).toList();
         return itemRepository.findByCategoryIn(list);
     }
 }

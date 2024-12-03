@@ -23,9 +23,9 @@ public class HistoryService {
     private final MemberRefrigService memberRefrigService;
 
     public long addLog(History history) {
-        Member member = entityManager.find(Member.class, history.memberId());
-        Inventory inventory = entityManager.find(Inventory.class, history.inventoryId());
-        Unit unit = entityManager.find(Unit.class, history.unitId());
+        Member member = entityManager.getReference(Member.class, history.memberId());
+        Inventory inventory = entityManager.getReference(Inventory.class, history.inventoryId());
+        Unit unit = entityManager.getReference(Unit.class, history.unitId());
 
         Log log = Log.of(member, inventory, unit, history.amount(), null);
 

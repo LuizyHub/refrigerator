@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <h2>새로운 재고</h2>
+    <form th:action="@{${currentUri}}" th:object="${inventory}" method="post">
+
+        <!-- Hidden input으로 refrigId 포함 -->
+        <input type="hidden" name="refrigId" th:field="*{refrigId}" th:value="${refrigId}" />
+
+        <!-- Hidden input으로 itemId 포함 -->
+        <input type="hidden" name="itemId" th:field="*{itemId}" th:value="${item.itemId}" />
+
+        <div>
+            <!-- Item (읽기 전용) -->
+            <label for="itemName">Item</label>
+            <input id="itemName" type="text" th:value="${item.name}" readonly />
+        </div>
+
+        <div>
+            <!-- Unit -->
+            <label for="unitId">단위</label>
+            <select id="unitId" name="unitId" th:field="*{unitId}" required>
+                <option th:each="unit : ${units}" th:value="${unit.unitId}" th:text="${unit.name}">
+                    단위 선택
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <!-- Amount -->
+            <label for="amount">용량</label>
+            <input id="amount" type="number" name="amount" th:field="*{amount}" placeholder="숫자" required />
+        </div>
+
+        <div>
+            <!-- Expiration -->
+            <label for="endAt">유통기한</label>
+            <input id="endAt" type="datetime-local" name="endAt" th:field="*{endAt}" />
+        </div>
+
+        <div>
+            <!-- Buttons -->
+            <button type="button" th:onclick="'location.href=\'' + @{'/refrigerators/' + ${refrigId} + '/inventories'} + '\''">이전</button>
+            <button type="submit">생성하기</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

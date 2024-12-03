@@ -19,16 +19,17 @@ public class Unit {
     @Column(nullable = false, unique = true)
     private String name;  // 단위 이름 (예: kg, g, oz 등)
 
-    @Column(nullable = false)
-    private Integer stateId;
+    @ManyToOne(fetch = FetchType.LAZY)  // 다대일 관계 설정, 지연 로딩
+    @JoinColumn(name = "state_id", nullable = false)  // 외래 키 이름 설정
+    private State state;
 
-    public Unit(String name, Integer stateId) {
+    public Unit(String name, State state) {
         this.name = name;
-        this.stateId = stateId;
+        this.state = state;
     }
 
     // Factory method (static 메서드로 객체 생성)
-    public static Unit of(String name, Integer stateId) {
-        return new Unit(name, stateId);
+    public static Unit of(String name, State state) {
+        return new Unit(name, state);
     }
 }

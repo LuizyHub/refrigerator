@@ -13,7 +13,7 @@
   - 냉장고 재고 조회
 - [x] /refrigerators/{냉장고id}/inventories/items?category={카테고리id}
   - 냉장고 재고 추가 (아이템 선택)
-- [ ] /refrigerators/{냉장고id}/inventories/new?itemId={itemId}
+- [x] /refrigerators/{냉장고id}/inventories/new?itemId={itemId}
   - 냉장고 재고 추가 (단위, 용량, 유통기한)
 - [ ] /refrigerators/{냉장고id}/inventories/{재고id}
   - 냉장고 재고 수정, 소비 페이지
