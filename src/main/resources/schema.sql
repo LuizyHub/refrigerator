@@ -105,7 +105,9 @@ CREATE INDEX IF NOT EXISTS idx_inventory_item_id ON inventory (item_id);
 -- recipe_category 테이블
 CREATE TABLE IF NOT EXISTS recipe_category (
                                                category_id INT PRIMARY KEY AUTO_INCREMENT,
-                                               name VARCHAR(50) NOT NULL UNIQUE
+                                               name VARCHAR(50) NOT NULL UNIQUE,
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES member(user_id)
     );
 
 -- recipe 테이블
