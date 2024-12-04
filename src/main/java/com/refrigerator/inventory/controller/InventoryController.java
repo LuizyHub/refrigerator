@@ -146,4 +146,14 @@ public class InventoryController {
         inventoryService.addInventory(member.getUserId(), createDto);
         return "redirect:/refrigerators/" + createDto.getRefrigId() + "/inventories";
     }
+
+    @PostMapping("/{inventoryId}/delete")
+    public String deleteInventory(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @PathVariable Integer inventoryId
+    ) {
+        inventoryService.deleteInventoryWithPermission(member.getUserId(), inventoryId);
+        return "redirect:/refrigerators/" + refrigId + "/inventories";
+    }
 }

@@ -146,4 +146,12 @@ public class InventoryService {
     private String getUnitName(Long unitId) {
         return "Dummy Unit";
     }
+
+    public void deleteInventoryWithPermission(Long userId, Integer inventoryId) {
+        Inventory inventory = getInventoryById(userId, inventoryId);
+        if (!memberRefrigService.hasPermissionToDelete(userId, inventory.getRefrigId())) {
+            throw new UnauthorizedException("해당 냉장고에 대한 삭제 권한이 없습니다.");
+        }
+        inventoryRepository.deleteById(inventoryId);
+    }
 }

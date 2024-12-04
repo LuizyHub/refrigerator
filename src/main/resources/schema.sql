@@ -153,6 +153,6 @@ CREATE TABLE IF NOT EXISTS log (
                                    amount DOUBLE NOT NULL,
                                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                    FOREIGN KEY (user_id) REFERENCES member(user_id),
-    FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id),
+--     FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id),
     FOREIGN KEY (unit_id) REFERENCES unit(unit_id)
     );

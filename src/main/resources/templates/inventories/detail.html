@@ -40,6 +40,11 @@
 <!--        </div>-->
     </form>
 
+    <form th:action="@{'/refrigerators/' + ${refrigId} + '/inventories/' + ${inventoryId} + '/delete'}"
+          method="post">
+        <button type="submit" class="delete">삭제</button>
+    </form>
+
     <hr>
 
     <!-- 소비하기 폼 -->
