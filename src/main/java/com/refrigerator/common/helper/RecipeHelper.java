@@ -44,20 +44,36 @@ public class RecipeHelper {
         for (RecipeIngredient ingredient : ingredients) {
             Item item = ingredient.getItem();
             Unit unit = ingredient.getUnit();
-            double amount = inventories.stream().reduce(0.0, (acc, inventory) -> {
+            double amount = 0.0;
+
+            for (Inventory inventory : inventories) {
                 // 같은 아이템만 계산
                 if (!inventory.getItem().getItemId().equals(item.getItemId())) {
-                    return acc;
+                    continue;
                 }
 
                 // 유통기한이 지난 재고는 제외
                 if (inventory.getEndAt() != null && inventory.getEndAt().isBefore(LocalDateTime.now())) {
-                    return acc;
+                    continue;
                 }
 
                 // ingredient의 단위로 변환
-                return acc + unitTransformService.transformUnit(inventory.getUnit().getUnitId(), unit.getUnitId(), inventory.getAmount());
-            }, Double::sum);
+                amount += unitTransformService.transformUnit(inventory.getUnit().getUnitId(), unit.getUnitId(), inventory.getAmount());
+            }
+//            double amount = inventories.stream().reduce(0.0, (acc, inventory) -> {
+//                // 같은 아이템만 계산
+//                if (!inventory.getItem().getItemId().equals(item.getItemId())) {
+//                    return acc;
+//                }
+//
+//                // 유통기한이 지난 재고는 제외
+//                if (inventory.getEndAt() != null && inventory.getEndAt().isAfter(LocalDateTime.now())) {
+//                    return acc;
+//                }
+//
+//                // ingredient의 단위로 변환
+//                return acc + unitTransformService.transformUnit(inventory.getUnit().getUnitId(), unit.getUnitId(), inventory.getAmount());
+//            }, Double::sum);
 
             if (amount < ingredient.getAmount()) {
                 return false;
