@@ -1,6 +1,7 @@
 package com.refrigerator.permission.repository;
 
 import com.refrigerator.permission.entity.MemberRefrig;
+import com.refrigerator.refrig.entity.Refrigerator;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,4 +23,6 @@ public interface MemberRefrigRepository extends JpaRepository<MemberRefrig, Long
     @Transactional
     @Query(value = "INSERT INTO member_refrig (user_id, refrig_id, permission_id) VALUES (:userId, :refrigId, :permissionId)", nativeQuery = true)
     int insertMemberRefrig(Long userId, Long refrigId, Long permissionId);
+
+    List<MemberRefrig> findAllByRefrigerator(Refrigerator refrigerator);
 }

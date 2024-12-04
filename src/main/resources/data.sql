@@ -1,3 +1,8 @@
+-- OWNER: Read, Write, Delete 모두 허용
+INSERT INTO permission (name, readable, writable, deletable)
+SELECT 'OWNER', true, true, true
+    WHERE NOT EXISTS (SELECT 1 FROM permission WHERE name = 'OWNER');
+
 -- RWD: Read, Write, Delete 모두 허용
 INSERT INTO permission (name, readable, writable, deletable)
 SELECT 'RWD', true, true, true
@@ -81,7 +86,7 @@ SELECT 'kg', state_id
 -- UNIT TRANSFER
 -- ml -> l 변환 (1 ml = 0.001 l)
 INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
-SELECT u1.unit_id, u2.unit_id, 0.001
+SELECT u1.unit_id, u2.unit_id, 1000
 FROM unit u1
          JOIN unit u2 ON u1.state_id = u2.state_id
 WHERE u1.name = 'ml' AND u2.name = 'l'
@@ -93,7 +98,7 @@ WHERE u1.name = 'ml' AND u2.name = 'l'
 
 -- l -> ml 변환 (1 l = 1000 ml)
 INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
-SELECT u1.unit_id, u2.unit_id, 1000
+SELECT u1.unit_id, u2.unit_id, 0.001
 FROM unit u1
          JOIN unit u2 ON u1.state_id = u2.state_id
 WHERE u1.name = 'l' AND u2.name = 'ml'
@@ -105,7 +110,7 @@ WHERE u1.name = 'l' AND u2.name = 'ml'
 
 -- g -> kg 변환 (1 g = 0.001 kg)
 INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
-SELECT u1.unit_id, u2.unit_id, 0.001
+SELECT u1.unit_id, u2.unit_id, 1000
 FROM unit u1
          JOIN unit u2 ON u1.state_id = u2.state_id
 WHERE u1.name = 'g' AND u2.name = 'kg'
@@ -117,7 +122,7 @@ WHERE u1.name = 'g' AND u2.name = 'kg'
 
 -- kg -> g 변환 (1 kg = 1000 g)
 INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
-SELECT u1.unit_id, u2.unit_id, 1000
+SELECT u1.unit_id, u2.unit_id, 0.001
 FROM unit u1
          JOIN unit u2 ON u1.state_id = u2.state_id
 WHERE u1.name = 'kg' AND u2.name = 'g'

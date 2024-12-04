@@ -40,9 +40,9 @@ public class RefrigeratorService {
     public void createRefrigerator(Long userId, RefrigeratorCreateDto refrigeratorCreateDto) {
         Refrigerator save = refrigeratorRepository.save(refrigeratorCreateDto.toRefrigerator());
 
-        Permission rwdPermission = permissionService.getRWDPermission();
+        Permission permission = permissionService.getOwnerPermission();
 
-        memberRefrigService.createMemberRefrigRWD(userId, save.getRefrigId(), rwdPermission);
+        memberRefrigService.createMemberRefrigRWD(userId, save.getRefrigId(), permission);
     }
 
     public List<Refrigerator> getAllRefrigeratorsReadable(Long userId) {

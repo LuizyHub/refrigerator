@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <h2 th:text="${refrigerator.name} + ' 냉장고 권한 관리'">냉장고 권한 관리</h2>
+
+    <!-- 권한 추가 버튼 -->
+    <button type="button" th:onclick="'location.href=\'/refrigerators/' + ${refrigerator.refrigId} + '/share/new\''">추가</button>
+
+    <!-- 권한 공유 리스트 -->
+    <table>
+        <thead>
+        <tr>
+            <th>아이디</th>
+            <th>Read</th>
+            <th>Write</th>
+            <th>Delete</th>
+            <th>수정</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${shareList}">
+            <td th:text="${entry.key.email}">abc@gmail.com</td>
+            <td th:text="${entry.value.readable ? 'O' : 'X'}">O</td>
+            <td th:text="${entry.value.writable ? 'O' : 'X'}">X</td>
+            <td th:text="${entry.value.deletable ? 'O' : 'X'}">X</td>
+            <td>
+                <button type="button"
+                        th:onclick="'location.href=\'/refrigerators/' + ${refrigerator.refrigId} + '/share/' + ${entry.key.userId} + '\''">
+                    수정
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
