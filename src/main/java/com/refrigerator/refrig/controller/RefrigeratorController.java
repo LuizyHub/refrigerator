@@ -1,7 +1,9 @@
 package com.refrigerator.refrig.controller;
 
+import com.refrigerator.common.helper.RecipeHelper;
 import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.member.entity.Member;
+import com.refrigerator.permission.service.MemberRefrigService;
 import com.refrigerator.refrig.dto.RefrigeratorCreateDto;
 import com.refrigerator.refrig.entity.Refrigerator;
 import com.refrigerator.refrig.service.RefrigeratorService;
@@ -10,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RefrigeratorController {
     private final RefrigeratorService refrigeratorService;
-
+    private final RecipeHelper recipeHelper;
+    private final MemberRefrigService memberRefrigService;
 
     @GetMapping
     public String getRefrigerators(
@@ -53,5 +53,20 @@ public class RefrigeratorController {
 
         refrigeratorService.createRefrigerator(member.getUserId(), refrigeratorCreateDto);
         return "redirect:/refrigerators";
+    }
+
+    @GetMapping("/{refrigId}/consume/recipe/{recipeId}")
+    public String consumeRecipe(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @PathVariable Long recipeId
+
+    ) {
+        if (!memberRefrigService.hasPermissionToWrite(member.getUserId(), refrigId)) {
+            throw new IllegalArgumentException("No permission");
+        }
+
+        recipeHelper.consumeIngredients(refrigId, recipeId);
+        return "redirect:/refrigerators/" + refrigId + "/inventories";
     }
 }

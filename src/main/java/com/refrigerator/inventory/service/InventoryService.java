@@ -61,7 +61,26 @@ public class InventoryService {
 
     public List<Inventory> getAllInventories(Long refrigId) {
         // 재고 목록 조회
-        return inventoryRepository.findByRefrigId(refrigId);
+        List<Inventory> inventories = inventoryRepository.findByRefrigIdOrderByEndAtAsc(refrigId);
+
+        // 유통기한 임박순으로 정렬, null값은 가장 마지막으로
+        int idx;
+
+        for (idx = inventories.size() - 1; idx >= 0; idx--) {
+            if (inventories.get(idx).getEndAt() == null) {
+                break;
+            }
+        }
+
+        if (idx != -1) {
+            List<Inventory> list = new ArrayList<>();
+            list.addAll(inventories.subList(idx + 1, inventories.size()));
+            list.addAll(inventories.subList(0, idx + 1));
+
+            inventories = list;
+        }
+
+        return inventories;
     }
 
     public void addInventory(Long userId, InventoryCreateDto createDto) {
@@ -113,7 +132,9 @@ public class InventoryService {
     public double consumeInventory(Integer inventoryId, double amount) {
         Inventory inventory = inventoryRepository.findById(inventoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Inventory not found"));
-        return inventory.consume(amount);
+        double consume = inventory.consume(amount);
+        inventoryRepository.save(inventory);
+        return consume;
     }
 
     private String getItemName(Long itemId) {

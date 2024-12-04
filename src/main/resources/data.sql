@@ -66,6 +66,18 @@ SELECT 'l', state_id
     WHERE name = 'LIQUID'
     AND NOT EXISTS (SELECT 1 FROM unit WHERE name = 'l');
 
+INSERT INTO unit (name, state_id)
+SELECT 'g', state_id
+    FROM state
+    WHERE name = 'SOLID'
+    AND NOT EXISTS (SELECT 1 FROM unit WHERE name = 'g');
+
+INSERT INTO unit (name, state_id)
+SELECT 'kg', state_id
+    FROM state
+    WHERE name = 'SOLID'
+    AND NOT EXISTS (SELECT 1 FROM unit WHERE name = 'kg');
+
 -- UNIT TRANSFER
 -- ml -> l 변환 (1 ml = 0.001 l)
 INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
@@ -91,6 +103,30 @@ WHERE u1.name = 'l' AND u2.name = 'ml'
     WHERE from_unit_id = u1.unit_id AND to_unit_id = u2.unit_id
 );
 
+-- g -> kg 변환 (1 g = 0.001 kg)
+INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
+SELECT u1.unit_id, u2.unit_id, 0.001
+FROM unit u1
+         JOIN unit u2 ON u1.state_id = u2.state_id
+WHERE u1.name = 'g' AND u2.name = 'kg'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM unit_transform
+    WHERE from_unit_id = u1.unit_id AND to_unit_id = u2.unit_id
+);
+
+-- kg -> g 변환 (1 kg = 1000 g)
+INSERT INTO unit_transform (from_unit_id, to_unit_id, ratio)
+SELECT u1.unit_id, u2.unit_id, 1000
+FROM unit u1
+         JOIN unit u2 ON u1.state_id = u2.state_id
+WHERE u1.name = 'kg' AND u2.name = 'g'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM unit_transform
+    WHERE from_unit_id = u1.unit_id AND to_unit_id = u2.unit_id
+);
+
 
 -- CATEGORY
 
@@ -102,6 +138,14 @@ INSERT INTO item_category (name)
 SELECT '육류'
     WHERE NOT EXISTS (SELECT 1 FROM item_category WHERE name = '육류');
 
+INSERT INTO item_category (name)
+SELECT '채소'
+    WHERE NOT EXISTS (SELECT 1 FROM item_category WHERE name = '채소');
+
+INSERT INTO item_category (name)
+SELECT '면류'
+    WHERE NOT EXISTS (SELECT 1 FROM item_category WHERE name = '면류');
+
 
 -- ITEM
 
@@ -111,6 +155,27 @@ SELECT 'milk', category_id, state_id
     WHERE item_category.name = '유제품'
     AND state.name = 'LIQUID'
     AND NOT EXISTS (SELECT 1 FROM item WHERE name = 'milk');
+
+INSERT INTO item (name, category_id, state_id)
+SELECT 'cheese', category_id, state_id
+    FROM item_category, state
+    WHERE item_category.name = '유제품'
+    AND state.name = 'SOLID'
+    AND NOT EXISTS (SELECT 1 FROM item WHERE name = 'cheese');
+
+INSERT INTO item (name, category_id, state_id)
+SELECT '스파게티 면', category_id, state_id
+    FROM item_category, state
+    WHERE item_category.name = '면류'
+    AND state.name = 'SOLID'
+    AND NOT EXISTS (SELECT 1 FROM item WHERE name = '스파게티 면');
+
+INSERT INTO item (name, category_id, state_id)
+SELECT '베이컨', category_id, state_id
+    FROM item_category, state
+    WHERE item_category.name = '육류'
+    AND state.name = 'SOLID'
+    AND NOT EXISTS (SELECT 1 FROM item WHERE name = '베이컨');
 
 INSERT INTO item (name, category_id, state_id)
 SELECT '삼겹살', category_id, state_id

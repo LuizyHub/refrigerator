@@ -45,15 +45,18 @@ public class RecipeHelper {
             Item item = ingredient.getItem();
             Unit unit = ingredient.getUnit();
             double amount = inventories.stream().reduce(0.0, (acc, inventory) -> {
+                // 같은 아이템만 계산
+                if (!inventory.getItem().getItemId().equals(item.getItemId())) {
+                    return acc;
+                }
+
                 // 유통기한이 지난 재고는 제외
                 if (inventory.getEndAt() != null && inventory.getEndAt().isBefore(LocalDateTime.now())) {
                     return acc;
                 }
-                if (inventory.getItem().getItemId().equals(item.getItemId())
-                        && inventory.getUnit().getUnitId().equals(unit.getUnitId())) {
-                    return acc + unitTransformService.transformUnit(unit.getUnitId(), inventory.getUnit().getUnitId(), inventory.getAmount());
-                }
-                return acc;
+
+                // ingredient의 단위로 변환
+                return acc + unitTransformService.transformUnit(inventory.getUnit().getUnitId(), unit.getUnitId(), inventory.getAmount());
             }, Double::sum);
 
             if (amount < ingredient.getAmount()) {
@@ -87,24 +90,39 @@ public class RecipeHelper {
         for (RecipeIngredient ingredient : ingredients) {
             Item item = ingredient.getItem();
             Unit unit = ingredient.getUnit();
+
+            // 사용해야할 양
             double amount = ingredient.getAmount();
 
             for (Inventory inventory : inventories) {
+                // 같은 아이템만 계산
+                if (!inventory.getItem().getItemId().equals(item.getItemId())) {
+                    continue;
+                }
+
                 // 유통기한이 지난 재고는 제외
                 if (inventory.getEndAt() != null && inventory.getEndAt().isBefore(LocalDateTime.now())) {
                     continue;
                 }
-                if (inventory.getItem().getItemId().equals(item.getItemId())
-                        && inventory.getUnit().getUnitId().equals(unit.getUnitId())) {
-                    double consumedAmount = unitTransformService.transformUnit(unit.getUnitId(), inventory.getUnit().getUnitId(), amount);
-                    if (inventory.getAmount() >= consumedAmount) {
-                        inventoryService.consumeInventory(inventory.getId(), consumedAmount);
-                        amount -= consumedAmount;
-                    } else {
-                        inventoryService.consumeInventory(inventory.getId(), inventory.getAmount());
-                        amount -= inventory.getAmount();
-                    }
+
+                // ingredient의 단위로 변환
+                double consumedAmount = unitTransformService.transformUnit(inventory.getUnit().getUnitId(), unit.getUnitId(), inventory.getAmount());
+
+                // 재고 소비
+                if (consumedAmount < amount) { // 현재 재고로 부족한 경우
+                    inventoryService.consumeInventory(inventory.getId(), inventory.getAmount());
                 }
+                else { // 현재 재고로 충분한 경우
+                    // 필요한 만큼만 소비
+                    consumedAmount = unitTransformService.transformUnit(unit.getUnitId(), inventory.getUnit().getUnitId(), amount);
+                    inventoryService.consumeInventory(inventory.getId(), consumedAmount);
+                    amount = 0;
+                    break;
+                }
+            }
+
+            if (amount > 0) {
+                throw new IllegalArgumentException("재고가 부족합니다.");
             }
         }
     }

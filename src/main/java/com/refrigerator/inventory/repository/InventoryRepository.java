@@ -10,6 +10,7 @@ import java.util.List;
 public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
 
   List<Inventory> findByRefrigId(Long refrigId); // refrigId로 데이터를 검색하는 메서드
+  List<Inventory> findByRefrigIdOrderByEndAtAsc(Long refrigId); // refrigId로 데이터를 검색하고 유통기한을 오름차순으로 정렬하는 메서드
 
 //  List<Inventory> findByRefrig_RefrigId(Long refrigId);
 }

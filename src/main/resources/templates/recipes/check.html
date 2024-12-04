@@ -20,7 +20,7 @@
                 <button type="button"
                         th:disabled="${!entry.value}"
                         th:classappend="${entry.value ? 'enabled' : 'disabled'}"
-                        th:onclick="'location.href=\'/refrigerators/' + ${entry.key.refrigId} + '/consume/recipe\''">
+                        th:onclick="'location.href=\'/refrigerators/' + ${entry.key.refrigId} + '/consume/recipe/' + ${recipe.recipeId} + '\''">
                     소비
                 </button>
             </div>

@@ -29,7 +29,7 @@
   - 레시피 재료 추가 (아이템 선택)
 - [x] /recipes/{레시피id}/ingredients/items/new?itemId={아이템id}
   - 레시피 재료 추가 (단위, 용량)
-- [ ] recipes/{레시피id}/refrigerators
+- [x] recipes/{레시피id}/refrigerators
   - 레시피를 제작할 수 있는 냉장고 조회
 - [ ] refrigerators/{냉장고id}/recipes
   - 냉장고에 있는 재료로 만들 수 있는 레시피 조회
