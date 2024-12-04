@@ -40,7 +40,7 @@
 냉장고 공유
 - [x] /refrigerators/{냉장고id}/share
   - 냉장고 공유 관리
-- [ ] /refrigerators/{냉장고id}/share/new
+- [x] /refrigerators/{냉장고id}/share/new
   - 냉장고 공유 추가
 - [ ] /refrigerators/{냉장고id}/share/{공유id}
   - 냉장고 공유 수정, 삭제

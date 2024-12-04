@@ -1,6 +1,7 @@
 package com.refrigerator.permission.service;
 
 import com.refrigerator.member.entity.Member;
+import com.refrigerator.permission.dto.ShareDto;
 import com.refrigerator.permission.entity.MemberRefrig;
 import com.refrigerator.permission.entity.Permission;
 import com.refrigerator.permission.repository.MemberRefrigRepository;

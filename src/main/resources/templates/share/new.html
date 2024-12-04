@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <h2>공유 권한 추가</h2>
+
+    <!-- 공유 권한 생성 폼 -->
+    <form th:action="@{'/refrigerators/' + ${refrigerator.refrigId} + '/share/new'}"
+          th:object="${share}" method="post">
+
+        <!-- 이메일 입력 -->
+        <div>
+            <label for="email">아이디 (이메일)</label>
+            <input id="email" type="email" name="email" th:field="*{email}" placeholder="abc@gmail.com" required />
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error">
+                이메일을 올바르게 입력해주세요.
+            </div>
+        </div>
+
+        <!-- 권한 설정 -->
+        <div>
+            <h3>권한 설정</h3>
+            <div>
+                <label>
+                    <input type="checkbox" th:field="*{readable}" />
+                    Read
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" th:field="*{writable}" />
+                    Write
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" th:field="*{deletable}" />
+                    Delete
+                </label>
+            </div>
+        </div>
+
+        <!-- 추가 버튼 -->
+        <div>
+            <button type="submit">추가</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>
