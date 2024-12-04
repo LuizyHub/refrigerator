@@ -28,7 +28,18 @@ public class ShareService {
         Permission permission = permissionService.getPermission(share.getReadable(), share.getWritable(), share.getDeletable());
 
         memberRefrigService.createMemberRefrigRWD(member.getUserId(), refrigId, permission);
+    }
 
+    public void editShare(Long refrigId, Long memberId, ShareDto share) {
+        Member member = memberService.findMemberById(memberId);
 
+        Permission permission = permissionService.getPermission(share.getReadable(), share.getWritable(), share.getDeletable());
+
+        memberRefrigService.editMemberRefrigRWD(member.getUserId(), refrigId, permission);
+    }
+
+    public void deleteShare(Long refrigId, Long memberId) {
+
+        memberRefrigService.deleteMemberRefrig(memberId, refrigId);
     }
 }

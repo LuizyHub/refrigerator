@@ -3,6 +3,7 @@ package com.refrigerator.permission.controller;
 import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.member.entity.Member;
 import com.refrigerator.permission.dto.ShareDto;
+import com.refrigerator.permission.entity.MemberRefrig;
 import com.refrigerator.permission.entity.Permission;
 import com.refrigerator.permission.service.MemberRefrigService;
 import com.refrigerator.permission.service.ShareService;
@@ -77,6 +78,71 @@ public class ShareController {
         }
 
         shareService.createShare(refrigId, shareDto);
+        return "redirect:/refrigerators/{refrigId}/share";
+    }
+
+    @GetMapping("/edit/{memberId}")
+    public String editShareForm(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @PathVariable Long memberId,
+            @ModelAttribute("share") ShareDto share,
+            Model model
+    ) {
+        if (!memberRefrigService.hasOwnerPermission(member.getUserId(), refrigId)) {
+            return "redirect:/refrigerators";
+        }
+
+        MemberRefrig memberRefrig = memberRefrigService.getMemberRefrigByUserIdAndRefrigId(memberId, refrigId);
+
+        share.setEmail(memberRefrig.getMember().getEmail());
+        share.setReadable(memberRefrig.getPermission().isReadable());
+        share.setWritable(memberRefrig.getPermission().isWritable());
+        share.setDeletable(memberRefrig.getPermission().isDeletable());
+
+        model.addAttribute("refrigerator", refrigeratorService.getRefrigeratorById(refrigId));
+        model.addAttribute("memberId", memberId);
+
+        return "share/edit";
+    }
+
+    @PostMapping("/edit/{memberId}")
+    public String editShare(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @PathVariable Long memberId,
+            @Valid @ModelAttribute("share") ShareDto share,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (!memberRefrigService.hasOwnerPermission(member.getUserId(), refrigId)) {
+            return "redirect:/refrigerators";
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("refrigerator", refrigeratorService.getRefrigeratorById(refrigId));
+            model.addAttribute("memberId", memberId);
+
+            return "share/edit";
+        }
+
+        shareService.editShare(refrigId, memberId, share);
+
+        return "redirect:/refrigerators/{refrigId}/share";
+    }
+
+    @PostMapping("/delete/{memberId}")
+    public String deleteShare(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            @PathVariable Long memberId
+    ) {
+        if (!memberRefrigService.hasOwnerPermission(member.getUserId(), refrigId)) {
+            return "redirect:/refrigerators/" + refrigId + "/share";
+        }
+
+        shareService.deleteShare(refrigId, memberId);
+
         return "redirect:/refrigerators/{refrigId}/share";
     }
 }

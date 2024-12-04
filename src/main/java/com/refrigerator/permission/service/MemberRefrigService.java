@@ -1,7 +1,6 @@
 package com.refrigerator.permission.service;
 
 import com.refrigerator.member.entity.Member;
-import com.refrigerator.permission.dto.ShareDto;
 import com.refrigerator.permission.entity.MemberRefrig;
 import com.refrigerator.permission.entity.Permission;
 import com.refrigerator.permission.repository.MemberRefrigRepository;
@@ -67,5 +66,24 @@ public class MemberRefrigService {
                         MemberRefrig::getMember,
                         MemberRefrig::getPermission
                 ));
+    }
+
+    public MemberRefrig getMemberRefrigByUserIdAndRefrigId(Long userId, Long refrigId) {
+        return memberRefrigRepository.findByMemberUserIdAndRefrigeratorRefrigId(userId, refrigId)
+                .orElseThrow(() -> new IllegalArgumentException("멤버 냉장고를 찾을 수 없습니다."));
+    }
+
+    public void editMemberRefrigRWD(Long userId, Long refrigId, Permission permission) {
+
+        MemberRefrig memberRefrig = memberRefrigRepository.findByMemberUserIdAndRefrigeratorRefrigId(userId, refrigId).orElseThrow(() -> new IllegalArgumentException("멤버 냉장고를 찾을 수 없습니다."));
+
+        memberRefrig.setPermission(permission);
+
+        memberRefrigRepository.save(memberRefrig);
+    }
+
+    public void deleteMemberRefrig(Long memberId, Long refrigId) {
+        MemberRefrig memberRefrig = memberRefrigRepository.findByMemberUserIdAndRefrigeratorRefrigId(memberId, refrigId).orElseThrow(() -> new IllegalArgumentException("멤버 냉장고를 찾을 수 없습니다."));
+        memberRefrigRepository.delete(memberRefrig);
     }
 }

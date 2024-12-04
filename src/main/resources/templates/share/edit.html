@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{header :: header}"></header> <!-- 공통 헤더 -->
+
+<main class="container">
+    <h2>공유 권한 수정</h2>
+
+    <!-- 공유 권한 수정 폼 -->
+    <form th:action="@{'/refrigerators/' + ${refrigerator.refrigId} + '/share/edit/' + ${memberId}}"
+          th:object="${share}" method="post">
+
+        <!-- 이메일 (읽기 전용) -->
+        <div>
+            <label for="email">아이디 (이메일)</label>
+            <input id="email" type="email" name="email" th:field="*{email}" readonly />
+        </div>
+
+        <!-- 권한 설정 -->
+        <div>
+            <h3>권한 설정</h3>
+            <div>
+                <label>
+                    <input type="checkbox" th:field="*{readable}" />
+                    Read
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" th:field="*{writable}" />
+                    Write
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" th:field="*{deletable}" />
+                    Delete
+                </label>
+            </div>
+        </div>
+
+        <!-- 버튼 -->
+        <div>
+            <button type="submit">수정</button>
+            <button type="button"
+                    th:onclick="'location.href=\'/refrigerators/' + ${refrigerator.refrigId} + '/share\''"
+                    class="cancel">
+                취소
+            </button>
+        </div>
+    </form>
+
+    <!-- 삭제 버튼 -->
+    <form th:action="@{'/refrigerators/' + ${refrigerator.refrigId} + '/share/delete/' + ${memberId}}"
+          method="post">
+        <button type="submit" class="delete">삭제</button>
+    </form>
+</main>
+</body>
+</html>

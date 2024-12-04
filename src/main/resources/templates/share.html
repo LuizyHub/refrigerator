@@ -29,7 +29,7 @@
             <td th:text="${entry.value.deletable ? 'O' : 'X'}">X</td>
             <td>
                 <button type="button"
-                        th:onclick="'location.href=\'/refrigerators/' + ${refrigerator.refrigId} + '/share/' + ${entry.key.userId} + '\''">
+                        th:onclick="'location.href=\'/refrigerators/' + ${refrigerator.refrigId} + '/share/edit/' + ${entry.key.userId} + '\''">
                     수정
                 </button>
             </td>

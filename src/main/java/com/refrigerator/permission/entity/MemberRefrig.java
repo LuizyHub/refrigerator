@@ -38,4 +38,9 @@ public class MemberRefrig {
     public static MemberRefrig of(Member member, Refrigerator refrigerator, Permission permission) {
         return new MemberRefrig(member, refrigerator, permission);
     }
+
+    public MemberRefrig setPermission(Permission permission) {
+        this.permission = permission;
+        return this;
+    }
 }

@@ -25,4 +25,6 @@ public interface MemberRefrigRepository extends JpaRepository<MemberRefrig, Long
     int insertMemberRefrig(Long userId, Long refrigId, Long permissionId);
 
     List<MemberRefrig> findAllByRefrigerator(Refrigerator refrigerator);
+
+
 }
