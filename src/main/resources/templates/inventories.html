@@ -50,10 +50,9 @@
         </tbody>
     </table>
 
-
-
-    <div class="history-button">
-        <a th:href="@{'/refrigerators/' + ${refrigId} + '/history'}" class="button">View History</a>
+    <div>
+        <button th:onclick="'location.href=\'/refrigerators/' + ${refrigId} + '/recipes\''">만들 수 있는 레시피</button>
+        <button th:onclick="'location.href=\'/refrigerators/' + ${refrigId} + '/history\''">변경 이력 조회</button>
     </div>
 
 </main>

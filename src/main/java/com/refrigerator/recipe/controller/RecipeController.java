@@ -17,6 +17,7 @@ import com.refrigerator.recipe.service.RecipeService;
 import com.refrigerator.recipeingredient.dto.RecipeIngredientDto;
 import com.refrigerator.recipeingredient.entity.RecipeIngredient;
 import com.refrigerator.recipeingredient.service.RecipeIngredientService;
+import com.refrigerator.refrig.entity.Refrigerator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 // form => update, delete
@@ -116,7 +114,8 @@ public class RecipeController {
             @PathVariable Long recipeId,
             Model model) {
         model.addAttribute("recipe", recipeService.getRecipeById(recipeId));
-        model.addAttribute("refrigeratorAvailability", recipeService.getRefrigeratorByRecipeIdWhereItemIsEnough(member.getUserId(), recipeId));
+        Map<Refrigerator, Boolean> refrigeratorAvailability = recipeService.getRefrigeratorByRecipeIdWhereItemIsEnough(member.getUserId(), recipeId);
+        model.addAttribute("refrigeratorAvailability", refrigeratorAvailability);
         return "recipes/check";
     }
 

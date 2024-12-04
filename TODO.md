@@ -31,8 +31,8 @@
   - 레시피 재료 추가 (단위, 용량)
 - [x] recipes/{레시피id}/refrigerators
   - 레시피를 제작할 수 있는 냉장고 조회
-- [ ] refrigerators/{냉장고id}/recipes
-  - 냉장고에 있는 재료로 만들 수 있는 레시피 조회
+- [x] refrigerators/{냉장고id}/recipes
+  - 냉장고에 있는 재고로 만들 수 있는 레시피 조회
 - [ ] refrigerators/{냉장고id}/history
   - 냉장고 사용 내역 조회
 

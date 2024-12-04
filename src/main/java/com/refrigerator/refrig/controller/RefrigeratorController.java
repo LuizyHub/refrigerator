@@ -4,6 +4,7 @@ import com.refrigerator.common.helper.RecipeHelper;
 import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.member.entity.Member;
 import com.refrigerator.permission.service.MemberRefrigService;
+import com.refrigerator.recipe.entity.Recipe;
 import com.refrigerator.refrig.dto.RefrigeratorCreateDto;
 import com.refrigerator.refrig.entity.Refrigerator;
 import com.refrigerator.refrig.service.RefrigeratorService;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/refrigerators")
@@ -68,5 +70,21 @@ public class RefrigeratorController {
 
         recipeHelper.consumeIngredients(refrigId, recipeId);
         return "redirect:/refrigerators/" + refrigId + "/inventories";
+    }
+
+    @GetMapping("/{refrigId}/recipes")
+    public String getRecipesByRefrigeratorWhereIngredientsExist(
+            @CurrentMember Member member,
+            @PathVariable Long refrigId,
+            Model model
+    ) {
+        if (!memberRefrigService.hasPermissionToRead(member.getUserId(), refrigId)) {
+            throw new IllegalArgumentException("No permission");
+        }
+
+        Map<Recipe, Boolean> recipeAvailability = refrigeratorService.getRecipesByRefrigIdsWhereInventoryIsEnough(member.getUserId(), refrigId);
+        model.addAttribute("recipeAvailability", recipeAvailability);
+        model.addAttribute("refrigerator", refrigeratorService.getRefrigeratorById(refrigId));
+        return "refrigerators/check";
     }
 }
