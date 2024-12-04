@@ -2,7 +2,6 @@ package com.refrigerator.inventory.controller;
 
 import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.inventory.dto.InventoryCreateDto;
-import com.refrigerator.inventory.dto.InventoryDto;
 import com.refrigerator.inventory.dto.InventoryResponseDto;
 import com.refrigerator.inventory.entity.Inventory;
 import com.refrigerator.inventory.service.InventoryService;
@@ -40,7 +39,7 @@ public class InventoryController {
             @PathVariable Long refrigId,
             Model model
     ) {
-        List<InventoryResponseDto> inventories = inventoryService.getAllInventories(member.getUserId(), refrigId);
+        List<InventoryResponseDto> inventories = inventoryService.getAllInventoriesWithPermission(member.getUserId(), refrigId);
         model.addAttribute("refrigId", refrigId);
         model.addAttribute("inventories", inventories);
         return "inventories"; // inventories.html 뷰로 이동
@@ -75,7 +74,7 @@ public class InventoryController {
             @RequestParam(value = "amount", required = true) Double amount,
             @RequestParam(value = "unitId", required = true) Integer unitId
     ) {
-        inventoryService.consumeInventory(member.getUserId(), inventoryId, amount, unitId);
+        inventoryService.consumeInventoryWithPermission(member.getUserId(), inventoryId, amount, unitId);
         return "redirect:/refrigerators/" + refrigId + "/inventories";
     }
 

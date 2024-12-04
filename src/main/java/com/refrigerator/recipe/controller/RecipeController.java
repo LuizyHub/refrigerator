@@ -110,4 +110,14 @@ public class RecipeController {
         return "redirect:/recipes"; // 삭제 후 레시피 목록으로 리다이렉트
     }
 
+    @GetMapping("/{recipeId}/refrigerators")
+    public String getRefrigeratorByRecipeIdWhereItemIsEnough(
+            @CurrentMember Member member,
+            @PathVariable Long recipeId,
+            Model model) {
+        model.addAttribute("recipe", recipeService.getRecipeById(recipeId));
+        model.addAttribute("refrigeratorAvailability", recipeService.getRefrigeratorByRecipeIdWhereItemIsEnough(member.getUserId(), recipeId));
+        return "recipes/check";
+    }
+
 }

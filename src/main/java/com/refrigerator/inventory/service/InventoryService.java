@@ -35,13 +35,12 @@ public class InventoryService {
      * @param refrigId
      * @return
      */
-    public List<InventoryResponseDto> getAllInventories(Long userId, Long refrigId) {
+    public List<InventoryResponseDto> getAllInventoriesWithPermission(Long userId, Long refrigId) {
         if (!memberRefrigService.hasPermissionToRead(userId, refrigId)) {
             throw new UnauthorizedException("해당 냉장고에 대한 읽기 권한이 없습니다.");
         }
 
-        // 재고 목록 조회
-        List<Inventory> inventories = inventoryRepository.findByRefrigId(refrigId);
+        List<Inventory> inventories = getAllInventories(refrigId);
 
         List<InventoryResponseDto> inventoryDtoList = new ArrayList<>();
         // 재고 목록 엔티티 to dto
@@ -57,8 +56,12 @@ public class InventoryService {
             // responseDto add
             inventoryDtoList.add(inventoryDto);
         }
-
         return inventoryDtoList;
+    }
+
+    public List<Inventory> getAllInventories(Long refrigId) {
+        // 재고 목록 조회
+        return inventoryRepository.findByRefrigId(refrigId);
     }
 
     public void addInventory(Long userId, InventoryCreateDto createDto) {
@@ -96,7 +99,7 @@ public class InventoryService {
         return inventory;
     }
 
-    public void consumeInventory(Long userId, Integer inventoryId, Double amount, Integer unitId) {
+    public void consumeInventoryWithPermission(Long userId, Integer inventoryId, Double amount, Integer unitId) {
         if (!memberRefrigService.hasPermissionToWrite(userId, getInventoryById(userId, inventoryId).getRefrigId())) {
             throw new UnauthorizedException("해당 냉장고에 대한 쓰기 권한이 없습니다.");
         }
@@ -105,6 +108,12 @@ public class InventoryService {
         inventory.consume(consumedAmount);
 
         inventoryRepository.save(inventory);
+    }
+
+    public double consumeInventory(Integer inventoryId, double amount) {
+        Inventory inventory = inventoryRepository.findById(inventoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Inventory not found"));
+        return inventory.consume(amount);
     }
 
     private String getItemName(Long itemId) {
