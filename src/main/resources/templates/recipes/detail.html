@@ -33,6 +33,10 @@
         </tr>
         </tbody>
     </table>
+
+    <form th:action="@{|/recipes/${recipeId}/delete|}" method="post" style="display:inline;">
+        <button type="submit" class="delete">삭제</button>
+    </form>
 </main>
 
 </body>

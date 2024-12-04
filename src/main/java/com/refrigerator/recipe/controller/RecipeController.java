@@ -103,7 +103,10 @@ public class RecipeController {
 
     // 특정 레시피 삭제 처리
     @PostMapping("/{recipeId}/delete")
-    public String deleteRecipe(@PathVariable Long recipeId) {
+    public String deleteRecipe(
+            @CurrentMember Member member,
+            @PathVariable Long recipeId
+    ) {
         recipeService.deleteRecipeById(recipeId);
         return "redirect:/recipes"; // 삭제 후 레시피 목록으로 리다이렉트
     }
