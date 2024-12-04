@@ -127,6 +127,7 @@ public class InventoryService {
         inventory.consume(consumedAmount);
 
         inventoryRepository.save(inventory);
+        historyService.addLog(new History(null, null, inventoryId, inventory.getUnit().getUnitId(), -consumedAmount));
     }
 
     public double consumeInventory(Integer inventoryId, double amount) {
@@ -134,6 +135,7 @@ public class InventoryService {
                 .orElseThrow(() -> new IllegalArgumentException("Inventory not found"));
         double consume = inventory.consume(amount);
         inventoryRepository.save(inventory);
+        historyService.addLog(new History(null, null, inventoryId, inventory.getUnit().getUnitId(), -consume));
         return consume;
     }
 

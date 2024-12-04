@@ -2,8 +2,10 @@ package com.refrigerator.history;
 
 import com.refrigerator.common.resolver.CurrentMember;
 import com.refrigerator.history.dto.History;
+import com.refrigerator.history.entity.Log;
 import com.refrigerator.history.service.HistoryService;
 import com.refrigerator.member.entity.Member;
+import com.refrigerator.refrig.service.RefrigeratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,16 +21,17 @@ import java.util.List;
 public class HistoryController {
 
     private final HistoryService historyService;
-
+    private final RefrigeratorService refrigeratorService;
     @GetMapping
     public String getHistory(
             @CurrentMember Member member,
             @PathVariable Long refrigId,
             Model model
     ) {
-        List<History> logsByRefrigId = historyService.getLogsByRefrigId(member.getUserId(), refrigId);
+        List<Log> logsByRefrigId = historyService.getLogsByRefrigId(member.getUserId(), refrigId);
 
         model.addAttribute("history", logsByRefrigId);
+        model.addAttribute("refrigerator", refrigeratorService.getRefrigeratorById(refrigId));
 
         return "history";
     }

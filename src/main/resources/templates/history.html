@@ -8,7 +8,7 @@
 
 <main class="container">
     <!-- 냉장고 이름 표시 -->
-    <h2 th:text="'{' + ${refrigName} + '} 변경 이력'">냉장고 이름 변경 이력</h2>
+    <h2 th:text="${refrigerator.name} + ' 변경 이력'">냉장고 이름 변경 이력</h2>
 
     <!-- 뒤로가기 버튼 -->
     <a th:href="@{'/refrigerators'}" class="button">뒤로가기</a>
@@ -33,12 +33,17 @@
         <tbody>
         <!-- 각 이력을 반복 출력 -->
         <tr th:each="log : ${history}">
-            <td th:text="${log.memberId()}">Sample Member</td>
-            <td th:text="${log.inventoryId()}">Sample Inventory</td>
-            <td th:text="${log.amount()}">0</td>
-            <td th:text="${log.unitId()}">ml</td>
-            <td th:text="'추가 또는 소비'">소비</td>
-            <td th:text="${#dates.format(log.timestamp(), 'yyyy-MM-dd HH:mm')}">2024-10-02 22:21</td>
+            <td th:text="${log.member.name}">Sample Member</td>
+            <td>
+                <a th:href="@{'/refrigerators/' + ${refrigerator.refrigId} + '/inventories/' + ${log.inventory.id}}"
+                   th:text="${log.inventory.item.name + '#' + log.inventory.id}">
+                    Sample Inventory
+                </a>
+            </td>
+            <td th:text="${log.amount > 0 ? log.amount : (log.amount * -1)}">0</td> <!-- 값 표시 -->
+            <td th:text="${log.unit.name}">ml</td>
+            <td th:text="${log.amount > 0 ? '추가' : '소비'}">소비</td> <!-- 조건에 따른 텍스트 -->
+            <td th:text="${log.timestamp}">2024-10-02 22:21</td>
         </tr>
         </tbody>
     </table>

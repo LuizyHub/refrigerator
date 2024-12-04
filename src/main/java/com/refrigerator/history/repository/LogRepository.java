@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface LogRepository extends JpaRepository<Log, Long> {
 
-    List<Log> findByInventory_RefrigIdOrderByTimestampAsc(Long refrigId);
+    List<Log> findByInventory_RefrigIdOrderByTimestampDesc(Long inventoryRefrigId);
 
 }
