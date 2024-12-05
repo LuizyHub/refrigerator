@@ -3,10 +3,24 @@ spring:
     name: "refrigerator"
 
   datasource:
-    url: jdbc:h2:file:./db
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/your_database_name
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true      
+    properties:
+      hibernate:
+        format_sql: true
+
+
+#  datasource:
+#    url: jdbc:h2:file:./db
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
 
   h2:
     console:

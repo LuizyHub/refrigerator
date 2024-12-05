@@ -32,9 +32,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	// h2 database
-	implementation 'com.h2database:h2'
+//	implementation 'com.h2database:h2'
+	// mysql database
+	runtimeOnly 'mysql:mysql-connector-java'
 
-	// spring validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// thymeleaf
